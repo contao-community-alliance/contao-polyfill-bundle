@@ -1,0 +1,55 @@
+{
+    "name": "contao-community-alliance/contao-polyfill-bundle",
+    "description": "This polyfill bundle support some contao features in older versions.",
+    "keywords": [
+        "contao",
+        "polyfill",
+        "bundle"
+    ],
+    "type": "contao-bundle",
+    "homepage": "http://c-c-a.org/",
+    "license": "LGPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "Christian Schiffler",
+            "email": "c.schiffler@cyberspectrum.de",
+            "homepage": "http://www.cyberspectrum.de",
+            "role": "Developer"
+        },
+        {
+            "name": "Sven Baumann",
+            "email": "baumann.sv@gmail.com",
+            "role": "Developer"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/contao-community-alliance/contao-polyfill-bundle/issues",
+        "irc": "irc://irc.freenode.org/contao.dev",
+        "source": "https://github.com/contao-community-alliance/contao-polyfill-bundle"
+    },
+    "require": {
+        "php": "^7.1",
+        "contao/core-bundle": "^4.4"
+    },
+    "require-dev": {
+        "phpcq/all-tasks": "^1.2",
+        "contao/manager-plugin": "^2.2",
+        "php-http/mock-client": "^1.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "ContaoCommunityAlliance\\Polyfill\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "ContaoCommunityAlliance\\Polyfill\\Test\\": "tests/Test/"
+        }
+    },
+    "extra": {
+        "contao-manager-plugin": "ContaoCommunityAlliance\\Polyfill\\ContaoManager\\Plugin",
+        "branch-alias": {
+            "dev-master": "1.0.x-dev"
+        }
+    }
+}
