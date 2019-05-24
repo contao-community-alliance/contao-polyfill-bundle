@@ -1,0 +1,10 @@
+copy-left:
+    "Andreas Schempp <andreas.schempp@terminal42.ch>":
+        - "Controller/RegisterHookListenersController.php"
+        - "DependencyInjection/Compiler/RegisterHookListenersCompiler.php"
+    "David Molineus <mail@netzmacht.de>":
+        - "Controller/RegisterHookListenersController.php"
+        - "DependencyInjection/Compiler/RegisterHookListenersCompiler.php"
+    "Leo Feyer <github@contao.org>":
+        - "Controller/RegisterHookListenersController.php"
+        - "DependencyInjection/Compiler/RegisterHookListenersCompiler.php"

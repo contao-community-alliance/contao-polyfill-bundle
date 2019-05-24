@@ -30,7 +30,8 @@
     "require": {
         "php": "^7.1",
         "contao/core-bundle": "^4.4",
-        "ocramius/package-versions": "^1.4"
+        "ocramius/package-versions": "^1.4",
+        "symfony/dependency-injection": "^3.4"
     },
     "require-dev": {
         "phpcq/all-tasks": "^1.2",

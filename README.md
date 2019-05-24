@@ -7,3 +7,7 @@ Contao Polyfill Bundle
 ======================
 
 This polyfill bundle support some Contao features in older versions.
+
+Provided Contao features:
+-------------------------
+- Hooks as tagged service in Contao installed version < 4.5

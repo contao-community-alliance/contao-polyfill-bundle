@@ -19,6 +19,10 @@
 
 namespace ContaoCommunityAlliance\Polyfill;
 
+use ContaoCommunityAlliance\Polyfill\DependencyInjection\Compiler\RegisterHookListenersCompiler;
+use PackageVersions\Versions;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
@@ -26,4 +30,29 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 class CcaContaoPolyfillBundle extends Bundle
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function build(ContainerBuilder $container): void
+    {
+        parent::build($container);
+
+        try {
+            $version = \ltrim(\strstr(Versions::getVersion('contao/core-bundle'), '@', true), 'v');
+        } catch (\OutOfBoundsException $e) {
+            $version = \ltrim(\strstr(Versions::getVersion('contao/contao'), '@', true), 'v');
+        }
+
+        if (\version_compare($version, '4.5', '<')) {
+            $container->addCompilerPass(new RegisterHookListenersCompiler(), PassConfig::TYPE_OPTIMIZE);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getParent()
+    {
+        return null;
+    }
 }
