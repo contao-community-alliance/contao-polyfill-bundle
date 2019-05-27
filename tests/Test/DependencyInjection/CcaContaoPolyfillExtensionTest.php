@@ -17,32 +17,31 @@
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill\Test;
+namespace ContaoCommunityAlliance\Polyfill\Test\DependencyInjection;
 
-use ContaoCommunityAlliance\Polyfill\CcaContaoPolyfillBundle;
-use ContaoCommunityAlliance\Polyfill\DependencyInjection\Compiler\RegisterHookListenersCompiler;
+use ContaoCommunityAlliance\Polyfill\DependencyInjection\CcaContaoPolyfillExtension;
 use PackageVersions\Versions;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * The test for the bundle.
+ * Class CcaContaoPolyfillExtensionTest
  *
- * @covers \ContaoCommunityAlliance\Polyfill\CcaContaoPolyfillBundle
+ * @covers \ContaoCommunityAlliance\Polyfill\DependencyInjection\CcaContaoPolyfillExtension
  */
-class CcaContaoPolyfillBundleTest extends TestCase
+class CcaContaoPolyfillExtensionTest extends TestCase
 {
-    public function dataProviderBuild(): array
+    public function dataProviderLoad()
     {
         return [
-            ['4.5.0', [RegisterHookListenersCompiler::class]]
+            ['4.5.0', ['cca.contao_polyfill.controller.register_hook_listener']]
         ];
     }
 
     /**
-     * @dataProvider dataProviderBuild
+     * @dataProvider dataProviderLoad
      */
-    public function testBundle(string $testVersion, array $testPasses): void
+    public function testLoad($testVersion, $testServices)
     {
         try {
             $version = \ltrim(\strstr(Versions::getVersion('contao/core-bundle'), '@', true), 'v');
@@ -50,20 +49,20 @@ class CcaContaoPolyfillBundleTest extends TestCase
             $version = \ltrim(\strstr(Versions::getVersion('contao/contao'), '@', true), 'v');
         }
 
-        $passes    = (\version_compare($version, $testVersion, '<')) ? $testPasses : [];
+        $services  = (\version_compare($version, $testVersion, '<')) ? $testServices : [];
         $container = $this->createMock(ContainerBuilder::class);
         $container
-            ->expects($this->exactly(\count($passes)))
-            ->method('addCompilerPass')
+            ->expects($this->exactly(\count($services)))
+            ->method('setDefinition')
             ->with(
                 $this->callback(
-                    function ($param) use ($passes) {
-                        return \in_array(\get_class($param), $passes, true);
+                    function ($id) use ($services) {
+                        return \in_array($id, $services, true);
                     }
                 )
             );
 
-        $bundle = new CcaContaoPolyfillBundle();
-        $bundle->build($container);
+        $extension = new CcaContaoPolyfillExtension();
+        $extension->load([], $container);
     }
 }
