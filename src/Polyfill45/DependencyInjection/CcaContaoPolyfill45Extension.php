@@ -43,5 +43,9 @@ final class CcaContaoPolyfill45Extension extends Extension
         if ($config['tagged_hooks']) {
             $loader->load('tagged_hooks.yml');
         }
+
+        if ($config['asset']) {
+            $loader->load('asset.yml');
+        }
     }
 }

@@ -12,6 +12,7 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2019 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -57,7 +58,7 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
 
         $extension = new CcaContaoPolyfill45Extension();
 
-        $extension->load([['tagged_hooks' => true]], $container);
+        $extension->load([['tagged_hooks' => true, 'asset' => false]], $container);
     }
 
     /**
@@ -65,7 +66,43 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
      *
      * @return void
      */
-    public function testDoesNotLoadHooksIfDisabled(): void
+    public function testLoadsAssetIfActive(): void
+    {
+        $container = $this
+            ->getMockBuilder(ContainerBuilder::class)
+            ->setMethods(['setDefinition'])
+            ->getMock();
+        $container->expects($this->exactly(3))->method('setDefinition');
+
+        $extension = new CcaContaoPolyfill45Extension();
+
+        $extension->load([['tagged_hooks' => false, 'asset' => true]], $container);
+    }
+
+    /**
+     * Test.
+     *
+     * @return void
+     */
+    public function testDoesNotLoadHooksAndAssetIfActive(): void
+    {
+        $container = $this
+            ->getMockBuilder(ContainerBuilder::class)
+            ->setMethods(['setDefinition'])
+            ->getMock();
+        $container->expects($this->exactly(4))->method('setDefinition');
+
+        $extension = new CcaContaoPolyfill45Extension();
+
+        $extension->load([['tagged_hooks' => true, 'asset' => true]], $container);
+    }
+
+    /**
+     * Test.
+     *
+     * @return void
+     */
+    public function testDoesNotLoadHooksAndAssetIfDisabled(): void
     {
         $container = $this
             ->getMockBuilder(ContainerBuilder::class)
@@ -75,6 +112,6 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
 
         $extension = new CcaContaoPolyfill45Extension();
 
-        $extension->load([['tagged_hooks' => false]], $container);
+        $extension->load([['tagged_hooks' => false, 'asset' => false]], $container);
     }
 }

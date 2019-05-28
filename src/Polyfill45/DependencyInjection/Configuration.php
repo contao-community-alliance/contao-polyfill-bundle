@@ -49,6 +49,10 @@ final class Configuration implements ConfigurationInterface
                     ->info('Register HOOKs as tagged services.')
                     ->defaultTrue()
                 ->end()
+                ->booleanNode('asset')
+                    ->info('Use the Contao asset.')
+                    ->defaultTrue()
+                ->end()
             ->end();
 
         return $treeBuilder;

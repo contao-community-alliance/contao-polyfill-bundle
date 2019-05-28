@@ -12,6 +12,7 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2019 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -53,6 +54,7 @@ class ConfigurationTest extends TestCase
             'empty' => [
                 'expected' => [
                     'tagged_hooks' => true,
+                    'asset' => true,
                 ],
                 'input'    => [
                 ]
@@ -60,17 +62,51 @@ class ConfigurationTest extends TestCase
             'tagged_hooks active' => [
                 'expected' => [
                     'tagged_hooks' => true,
+                    'asset' => false,
                 ],
                 'input'    => [
                     'tagged_hooks' => true,
+                    'asset' => false,
+                ]
+            ],
+            'asset active' => [
+                'expected' => [
+                    'tagged_hooks' => false,
+                    'asset' => true,
+                ],
+                'input'    => [
+                    'tagged_hooks' => false,
+                    'asset' => true,
+                ]
+            ],
+            'tagged_hooks and asset active' => [
+                'expected' => [
+                    'tagged_hooks' => true,
+                    'asset' => true,
+                ],
+                'input'    => [
+                    'tagged_hooks' => true,
+                    'asset' => true,
                 ]
             ],
             'tagged_hooks disabled' => [
                 'expected' => [
                     'tagged_hooks' => false,
+                    'asset' => true,
                 ],
                 'input'    => [
                     'tagged_hooks' => false,
+                    'asset' => true,
+                ]
+            ],
+            'tagged_hooks and asset disabled' => [
+                'expected' => [
+                    'tagged_hooks' => false,
+                    'asset' => false,
+                ],
+                'input'    => [
+                    'tagged_hooks' => false,
+                    'asset' => false,
                 ]
             ],
         ];

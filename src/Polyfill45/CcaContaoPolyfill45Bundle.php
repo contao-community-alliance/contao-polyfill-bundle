@@ -22,6 +22,7 @@ declare(strict_types = 1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill45;
 
+use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\AddAssetsPackagesPass;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\RegisterHookListenersPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -40,5 +41,6 @@ final class CcaContaoPolyfill45Bundle extends Bundle
         parent::build($container);
 
         $container->addCompilerPass(new RegisterHookListenersPass(), PassConfig::TYPE_OPTIMIZE);
+        $container->addCompilerPass(new AddAssetsPackagesPass());
     }
 }

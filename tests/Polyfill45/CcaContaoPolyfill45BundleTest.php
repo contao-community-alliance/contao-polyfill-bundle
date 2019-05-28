@@ -12,6 +12,7 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Sven Baumann <baumann.sv@gmail.com>
  * @copyright  2019 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -23,6 +24,7 @@ namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill45;
 
 use Contao\ManagerPlugin\Config\ContainerBuilder;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\CcaContaoPolyfill45Bundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\AddAssetsPackagesPass;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\RegisterHookListenersPass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
@@ -50,9 +52,12 @@ class CcaContaoPolyfill45BundleTest extends TestCase
 
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
         $container
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('addCompilerPass')
-            ->with($this->isInstanceOf(RegisterHookListenersPass::class), PassConfig::TYPE_OPTIMIZE)
+            ->withConsecutive(
+                [$this->isInstanceOf(RegisterHookListenersPass::class), PassConfig::TYPE_OPTIMIZE],
+                [$this->isInstanceOf(AddAssetsPackagesPass::class)]
+            )
             ->willReturn($container);
 
         $bundle->build($container);

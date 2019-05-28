@@ -1,0 +1,25 @@
+services:
+    cca.polyfill_45_event_listener.insert_tags_asset:
+        class: ContaoCommunityAlliance\Polyfills\Polyfill45\EventListener\InsertTags\AssetListener
+        public: true
+        arguments:
+            - '@assets.packages'
+        tags:
+            -   name: contao.hook
+                hook: replaceInsertTags
+
+    contao.assets.files_context:
+        class: ContaoCommunityAlliance\Polyfills\Polyfill45\Asset\ContaoContext
+        public: true
+        arguments:
+            - "@request_stack"
+            - 'staticFiles'
+            - "%kernel.debug%"
+
+    contao.assets.plugins_context:
+        class: ContaoCommunityAlliance\Polyfills\Polyfill45\Asset\ContaoContext
+        public: true
+        arguments:
+            - "@request_stack"
+            - 'staticPlugins'
+            - "%kernel.debug%"
