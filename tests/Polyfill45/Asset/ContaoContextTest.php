@@ -14,6 +14,7 @@
  * @author     Andreas Schempp <andreas.schempp@terminal42.ch>
  * @author     Leo Feyer <github@contao.org>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @copyright  2019 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -21,14 +22,9 @@
 
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill45\Asset;
 
-use Contao\Config;
-use Contao\Controller;
-use Contao\CoreBundle\Config\ResourceFinder;
-use Contao\DcaExtractor;
-use Contao\LayoutModel;
-use Contao\Model;
-use Contao\PageModel;
 use Contao\System;
+use Contao\PageModel;
+use Contao\CoreBundle\Config\ResourceFinder;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\Asset\ContaoContext;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\CcaContaoPolyfill45Extension;
 use PHPUnit\Framework\TestCase;
@@ -43,6 +39,19 @@ use Symfony\Component\HttpFoundation\RequestStack;
  */
 class ContaoContextTest extends TestCase
 {
+    /**
+     * @inheritdoc
+     */
+    public static function setUpBeforeClass()
+    {
+        parent::setUpBeforeClass();
+        // Some class mapping for Contao 4.4.
+        self::aliasContaoClass('System');
+        self::aliasContaoClass('Model');
+        self::aliasContaoClass('PageModel');
+        self::aliasContaoClass('Date');
+    }
+
     public function testReturnsAnEmptyBasePathInDebugMode(): void
     {
         $context = new ContaoContext(new RequestStack(), 'staticPlugins', true);
@@ -59,7 +68,6 @@ class ContaoContextTest extends TestCase
 
     public function testReturnsAnEmptyBasePathIfThePageDoesNotDefineIt(): void
     {
-        $this->markTestIncomplete(__FUNCTION__);
         $page = $this->getPageWithDetails();
 
         $GLOBALS['objPage'] = $page;
@@ -80,7 +88,6 @@ class ContaoContextTest extends TestCase
         string $basePath,
         string $expected
     ): void {
-        $this->markTestIncomplete(__FUNCTION__);
         $request = $this->createMock(Request::class);
         $request
             ->expects($this->once())
@@ -114,7 +121,6 @@ class ContaoContextTest extends TestCase
 
     public function testReturnsTheStaticUrl(): void
     {
-        $this->markTestIncomplete(__FUNCTION__);
         $request = $this->createMock(Request::class);
         $request
             ->expects($this->once())
@@ -144,7 +150,6 @@ class ContaoContextTest extends TestCase
 
     public function testReadsTheSslConfigurationFromThePage(): void
     {
-        $this->markTestIncomplete(__FUNCTION__);
         $page = $this->getPageWithDetails();
 
         $GLOBALS['objPage'] = $page;
@@ -194,10 +199,35 @@ class ContaoContextTest extends TestCase
 
         System::setContainer($container);
 
-        $page                = new PageModel();
+        $page                = $this
+            ->getMockBuilder(PageModel::class)
+            ->disableOriginalConstructor()
+            ->setMethods([
+                // Must deactivate 'detach' - we are not attached anyway.
+                'detach',
+                '__set',
+                '__get',
+            ])
+            ->getMock();
+
+        // Must mock __get() and __set() as they trigger notices without end - buffering in local array helps.
+        $data = [];
+        $page->method('__get')->willReturnCallback(function ($key) use (&$data) {
+            return $data[$key] ?? null;
+        });
+        $page->method('__set')->willReturnCallback(function ($key, $value) use (&$data) {
+            $data[$key] = $value;
+        });
+
+        /** @var PageModel $page */
         $page->type          = 'root';
         $page->fallback      = true;
         $page->staticPlugins = '';
+
+        // Usually derived from \Contao\Config in PageModel::loadDetails() - must circumvent.
+        $page->dateFormat    = 'Y-m-d';
+        $page->timeFormat    = 'h:i:s';
+        $page->datimFormat   = 'Y-m-d h:i:s';
 
         return $page->loadDetails();
     }
@@ -228,5 +258,38 @@ class ContaoContextTest extends TestCase
         }
 
         return new ContaoContext($requestStack, $field);
+    }
+
+    /**
+     * Mapping between root namespace of contao and the contao namespace.
+     * Can map class, interface and trait.
+     *
+     * @param string $class The name of the class
+     *
+     * @return void
+     */
+    private static function aliasContaoClass($class)
+    {
+        // Class.
+        if (!\class_exists($class, true) && \class_exists('\\Contao\\' . $class, true)) {
+            if (!\class_exists($class, false)) {
+                \class_alias('\\Contao\\' . $class, $class);
+            }
+            return;
+        }
+        // Trait.
+        if (!\trait_exists($class, true) && \trait_exists('\\Contao\\' . $class, true)) {
+            if (!\trait_exists($class, false)) {
+                \class_alias('\\Contao\\' . $class, $class);
+            }
+            return;
+        }
+        // Interface.
+        if (!\interface_exists($class, true) && \interface_exists('\\Contao\\' . $class, true)) {
+            if (!\interface_exists($class, false)) {
+                \class_alias('\\Contao\\' . $class, $class);
+            }
+            return;
+        }
     }
 }
