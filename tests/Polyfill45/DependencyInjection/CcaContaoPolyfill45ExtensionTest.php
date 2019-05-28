@@ -23,6 +23,7 @@ declare(strict_types = 1);
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill45\DependencyInjection;
 
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\CcaContaoPolyfill45Extension;
+use ContaoCommunityAlliance\Polyfills\Polyfill45\Initialization\HookListenerRegistrar;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -54,7 +55,10 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
             ->getMockBuilder(ContainerBuilder::class)
             ->setMethods(['setDefinition'])
             ->getMock();
-        $container->expects($this->once())->method('setDefinition');
+        $container
+            ->expects($this->once())
+            ->method('setDefinition')
+            ->with(HookListenerRegistrar::class);
 
         $extension = new CcaContaoPolyfill45Extension();
 

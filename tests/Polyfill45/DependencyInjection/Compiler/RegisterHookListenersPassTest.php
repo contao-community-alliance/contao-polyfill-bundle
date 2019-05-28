@@ -367,7 +367,7 @@ class RegisterHookListenersPassTest extends TestCase
     private function getHookListenersFromDefinition(ContainerBuilder $container): array
     {
         $this->assertSame(
-            [\dirname(__DIR__, 4) . '/src/Polyfill45/Resources/hook-polyfill'],
+            [\dirname(__DIR__, 4) . '/src/Polyfill45/Resources/tagged_hooks'],
             $container->getParameter('contao.resources_paths')
         );
         $this->assertTrue($container->hasDefinition(HookListenerRegistrar::class));

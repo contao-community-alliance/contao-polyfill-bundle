@@ -50,7 +50,7 @@ class RegisterHookListenersPass implements CompilerPassInterface
         }
 
         $paths   = $container->getParameter('contao.resources_paths');
-        $paths[] = \dirname(__DIR__, 2) . '/Resources/hook-polyfill';
+        $paths[] = \dirname(__DIR__, 2) . '/Resources/tagged_hooks';
         $container->setParameter('contao.resources_paths', $paths);
 
         // Sort the listeners by priority

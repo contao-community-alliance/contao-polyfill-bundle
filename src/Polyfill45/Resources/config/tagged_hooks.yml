@@ -1,5 +1,5 @@
 services:
-  ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\Controller\RegisterHookListenersController:
+  ContaoCommunityAlliance\Polyfills\Polyfill45\Initialization\HookListenerRegistrar:
     public: true
     arguments:
       - [] # This argument is filled by the compiler pass.
