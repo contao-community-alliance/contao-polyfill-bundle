@@ -17,44 +17,94 @@
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill\ContaoManager;
+namespace ContaoCommunityAlliance\Polyfill\Test\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
-use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
+use Contao\ManagerPlugin\Bundle\Config\ConfigInterface;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use ContaoCommunityAlliance\Polyfill\CcaContaoPolyfillBundle;
+use ContaoCommunityAlliance\Polyfill\ContaoManager\Plugin;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion44Bundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion45Bundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion46Bundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion47Bundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersionNoneBundle;
 use PackageVersions\Versions;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Plugin for the Contao Manager.
+ * @covers \ContaoCommunityAlliance\Polyfill\ContaoManager\Plugin
  */
-class Plugin implements BundlePluginInterface
+class PluginTest extends TestCase
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function getBundles(ParserInterface $parser)
+    public function testGetBundles()
     {
-        return [
-            BundleConfig::create(CcaContaoPolyfillBundle::class)
-                ->setLoadAfter(
-                    [
-                        ContaoCoreBundle::class
-                    ]
-                ),
-            BundleConfig::create($this->getVersionBundle())
-                ->setLoadAfter(
-                    [
-                        CcaContaoPolyfillBundle::class
-                    ]
-                )
-        ];
+        $parser  = $this->createMock(ParserInterface::class);
+        $plugin  = new Plugin();
+        $bundles = $plugin->getBundles($parser);
+
+        $exceptedConfig = $this->mockBundleConfig();
+
+        foreach ($bundles as $config) {
+            $this->assertInstanceOf(BundleConfig::class, $config);
+            $this->assertSame($exceptedConfig->getName(), $config->getName());
+            $this->assertSame($exceptedConfig->getReplace(), $config->getReplace());
+            $this->assertSame($exceptedConfig->getLoadAfter(), $config->getLoadAfter());
+            $this->assertSame($exceptedConfig->loadInProduction(), $config->loadInProduction());
+            $this->assertSame($exceptedConfig->loadInDevelopment(), $config->loadInDevelopment());
+        }
+    }
+
+    private function mockBundleConfig(): ConfigInterface
+    {
+        $config = $this->createMock(ConfigInterface::class);
+
+        $config
+            ->expects($this->exactly(2))
+            ->method('getName')
+            ->willReturnOnConsecutiveCalls(
+                CcaContaoPolyfillBundle::class,
+                $this->getVersionBundle()
+            );
+
+        $config
+            ->expects($this->exactly(2))
+            ->method('getReplace')
+            ->willReturnOnConsecutiveCalls(
+                [],
+                []
+            );
+
+        $config
+            ->expects($this->exactly(2))
+            ->method('getLoadAfter')
+            ->willReturnOnConsecutiveCalls(
+                [
+                    ContaoCoreBundle::class
+                ],
+                [
+                    CcaContaoPolyfillBundle::class
+                ]
+            );
+
+        $config
+            ->expects($this->exactly(2))
+            ->method('loadInProduction')
+            ->willReturnOnConsecutiveCalls(
+                true,
+                true
+            );
+
+        $config
+            ->expects($this->exactly(2))
+            ->method('loadInDevelopment')
+            ->willReturnOnConsecutiveCalls(
+                true,
+                true
+            );
+
+        return $config;
     }
 
     /**
