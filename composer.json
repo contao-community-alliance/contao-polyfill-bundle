@@ -34,12 +34,14 @@
         "symfony/asset": "^3.4 || ^4.0",
         "symfony/config": "^3.4 || ^4.0",
         "symfony/dependency-injection": "^3.4 || ^4.0",
-        "symfony/http-kernel": "^3.4 || ^4.0"
+        "symfony/http-kernel": "^3.4 || ^4.0",
+        "symfony/http-foundation": "^3.4 || ^4.0"
     },
     "require-dev": {
         "phpcq/all-tasks": "^1.2",
         "contao/manager-plugin": "^2.2",
-        "php-http/mock-client": "^1.0"
+        "php-http/mock-client": "^1.0",
+        "symfony/filesystem": "^3.4 || ^4.0"
     },
     "autoload": {
         "psr-4": {
