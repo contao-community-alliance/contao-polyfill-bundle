@@ -26,6 +26,7 @@ use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\CcaContaoPo
 use ContaoCommunityAlliance\Polyfills\Polyfill45\Initialization\HookListenerRegistrar;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 /**
  * Test.
@@ -76,7 +77,14 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
             ->getMockBuilder(ContainerBuilder::class)
             ->setMethods(['setDefinition'])
             ->getMock();
-        $container->expects($this->exactly(3))->method('setDefinition');
+        $container
+            ->expects($this->exactly(3))
+            ->method('setDefinition')
+            ->withConsecutive(
+                ['cca.polyfill_45_event_listener.insert_tags_asset'],
+                ['contao.assets.files_context'],
+                ['contao.assets.plugins_context']
+            );
 
         $extension = new CcaContaoPolyfill45Extension();
 
@@ -88,13 +96,21 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
      *
      * @return void
      */
-    public function testDoesNotLoadHooksAndAssetIfActive(): void
+    public function testDoesLoadHooksAndAssetIfActive(): void
     {
         $container = $this
             ->getMockBuilder(ContainerBuilder::class)
             ->setMethods(['setDefinition'])
             ->getMock();
-        $container->expects($this->exactly(4))->method('setDefinition');
+        $container
+            ->expects($this->exactly(4))
+            ->method('setDefinition')
+            ->withConsecutive(
+                [HookListenerRegistrar::class],
+                ['cca.polyfill_45_event_listener.insert_tags_asset'],
+                ['contao.assets.files_context'],
+                ['contao.assets.plugins_context']
+            );
 
         $extension = new CcaContaoPolyfill45Extension();
 
@@ -117,5 +133,30 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
         $extension = new CcaContaoPolyfill45Extension();
 
         $extension->load([['tagged_hooks' => false, 'asset' => false]], $container);
+    }
+
+    /**
+     * Test.
+     *
+     * @return void
+     */
+    public function testContainerCanBeCompiledWithAllFeatures(): void
+    {
+        $container = new ContainerBuilder();
+        // Required by asset services.
+        $container->setParameter('kernel.debug', false);
+        $container->setDefinition('assets.packages', new Definition(\stdClass::class));
+        $container->setDefinition('request_stack', new Definition(\stdClass::class));
+
+        $container->registerExtension($extension = new CcaContaoPolyfill45Extension());
+        $extension->load([['tagged_hooks' => true, 'asset' => true]], $container);
+        $container->compile();
+        // tagged_hooks services.
+        $this->assertTrue($container->has(HookListenerRegistrar::class));
+
+        // asset services.
+        $this->assertTrue($container->has('cca.polyfill_45_event_listener.insert_tags_asset'));
+        $this->assertTrue($container->has('contao.assets.files_context'));
+        $this->assertTrue($container->has('contao.assets.plugins_context'));
     }
 }
