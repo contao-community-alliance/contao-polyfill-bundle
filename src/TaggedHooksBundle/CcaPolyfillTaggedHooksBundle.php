@@ -17,13 +17,25 @@
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill;
+namespace ContaoCommunityAlliance\Polyfill\TaggedHooksBundle;
 
+use ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\DependencyInjection\Compiler\RegisterHookListenersCompiler;
+use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * The Contao Community Alliance Polyfill Bundle.
+ * The polyfill bundle for tagged hooks.
  */
-final class CcaContaoPolyfillBundle extends Bundle
+final class CcaPolyfillTaggedHooksBundle extends Bundle
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function build(ContainerBuilder $container)
+    {
+        parent::build($container);
+
+        $container->addCompilerPass(new RegisterHookListenersCompiler(), PassConfig::TYPE_OPTIMIZE);
+    }
 }

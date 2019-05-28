@@ -20,7 +20,7 @@
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill\Controller;
+namespace ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\Controller;
 
 /**
  * This register the hook listeners.

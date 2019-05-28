@@ -20,7 +20,7 @@
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill\DependencyInjection\Compiler;
+namespace ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\DependencyInjection\Compiler;
 
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -36,8 +36,13 @@ class RegisterHookListenersCompiler implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
+        $registerHookListener = 'cca.contao_polyfill_tagged_hooks.controller.register_hook_listener';
+        if (false === $container->hasDefinition($registerHookListener)) {
+            return;
+        }
+
         $paths   = $container->getParameter('contao.resources_paths');
-        $paths[] = __DIR__ . '/../../Resources/contao-polyfill/register_hook_listener';
+        $paths[] = \dirname(__DIR__, 2) . '/Resources/contao-polyfill';
         $container->setParameter('contao.resources_paths', $paths);
 
         $hooks = $this->getHooks($container);
@@ -47,9 +52,7 @@ class RegisterHookListenersCompiler implements CompilerPassInterface
             \krsort($hooks[$hook]);
         }
 
-        $container
-            ->getDefinition('cca.contao_polyfill.controller.register_hook_listener')
-            ->replaceArgument(0, $hooks);
+        $container->getDefinition($registerHookListener)->replaceArgument(0, $hooks);
     }
 
     /**

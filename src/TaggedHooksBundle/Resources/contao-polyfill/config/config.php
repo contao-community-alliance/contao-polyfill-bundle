@@ -17,4 +17,6 @@
  * @filesource
  */
 
-\Contao\System::getContainer()->get('cca.contao_polyfill.controller.register_hook_listener')->registerHookListeners();
+\Contao\System::getContainer()
+    ->get('cca.contao_polyfill_tagged_hooks.controller.register_hook_listener')
+    ->registerHookListeners();

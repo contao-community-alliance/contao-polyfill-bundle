@@ -1,5 +1,0 @@
-services:
-    cca.contao_polyfill.controller.register_hook_listener:
-        class: ContaoCommunityAlliance\Polyfill\Controller\RegisterHookListenersController
-        arguments:
-            - # This argument has the hook listener. It added with the register hook listener compiler.

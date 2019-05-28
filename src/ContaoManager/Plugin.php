@@ -24,6 +24,7 @@ use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use ContaoCommunityAlliance\Polyfill\CcaContaoPolyfillBundle;
+use ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\CcaPolyfillTaggedHooksBundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion44Bundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion45Bundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion46Bundle;
@@ -52,6 +53,12 @@ class Plugin implements BundlePluginInterface
                 ->setLoadAfter(
                     [
                         CcaContaoPolyfillBundle::class
+                    ]
+                ),
+            BundleConfig::create(CcaPolyfillTaggedHooksBundle::class)
+                ->setLoadAfter(
+                    [
+                        CcaContaoPolyfillVersion44Bundle::class
                     ]
                 )
         ];

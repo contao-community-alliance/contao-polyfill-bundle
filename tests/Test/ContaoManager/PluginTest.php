@@ -25,6 +25,7 @@ use Contao\ManagerPlugin\Bundle\Config\ConfigInterface;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use ContaoCommunityAlliance\Polyfill\CcaContaoPolyfillBundle;
 use ContaoCommunityAlliance\Polyfill\ContaoManager\Plugin;
+use ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\CcaPolyfillTaggedHooksBundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion44Bundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion45Bundle;
 use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion46Bundle;
@@ -61,23 +62,25 @@ class PluginTest extends TestCase
         $config = $this->createMock(ConfigInterface::class);
 
         $config
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getName')
             ->willReturnOnConsecutiveCalls(
                 CcaContaoPolyfillBundle::class,
-                $this->getVersionBundle()
+                $this->getVersionBundle(),
+                CcaPolyfillTaggedHooksBundle::class
             );
 
         $config
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getReplace')
             ->willReturnOnConsecutiveCalls(
+                [],
                 [],
                 []
             );
 
         $config
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('getLoadAfter')
             ->willReturnOnConsecutiveCalls(
                 [
@@ -85,21 +88,26 @@ class PluginTest extends TestCase
                 ],
                 [
                     CcaContaoPolyfillBundle::class
+                ],
+                [
+                    CcaContaoPolyfillVersion44Bundle::class
                 ]
             );
 
         $config
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('loadInProduction')
             ->willReturnOnConsecutiveCalls(
+                true,
                 true,
                 true
             );
 
         $config
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(3))
             ->method('loadInDevelopment')
             ->willReturnOnConsecutiveCalls(
+                true,
                 true,
                 true
             );
