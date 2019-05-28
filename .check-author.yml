@@ -1,10 +1,16 @@
 copy-left:
-    "Andreas Schempp <andreas.schempp@terminal42.ch>":
-        - "Controller/RegisterHookListenersController.php"
-        - "DependencyInjection/Compiler/RegisterHookListenersCompiler.php"
-    "David Molineus <mail@netzmacht.de>":
-        - "Controller/RegisterHookListenersController.php"
-        - "DependencyInjection/Compiler/RegisterHookListenersCompiler.php"
-    "Leo Feyer <github@contao.org>":
-        - "Controller/RegisterHookListenersController.php"
-        - "DependencyInjection/Compiler/RegisterHookListenersCompiler.php"
+  "Andreas Schempp <andreas.schempp@terminal42.ch>":
+    - "Polyfill45/Initialization/HookListenerRegistrar.php"
+    - "Polyfill45/Initialization/HookListenerRegistrarTest.php"
+    - "Polyfill45/DependencyInjection/Compiler/RegisterHookListenersPass.php"
+    - "Polyfill45/DependencyInjection/Compiler/RegisterHookListenersPassTest.php"
+  "David Molineus <mail@netzmacht.de>":
+    - "Polyfill45/Initialization/HookListenerRegistrar.php"
+    - "Polyfill45/Initialization/HookListenerRegistrarTest.php"
+    - "Polyfill45/DependencyInjection/Compiler/RegisterHookListenersPass.php"
+    - "Polyfill45/DependencyInjection/Compiler/RegisterHookListenersPassTest.php"
+  "Leo Feyer <github@contao.org>":
+    - "Polyfill45/Initialization/HookListenerRegistrar.php"
+    - "Polyfill45/Initialization/HookListenerRegistrarTest.php"
+    - "Polyfill45/DependencyInjection/Compiler/RegisterHookListenersPass.php"
+    - "Polyfill45/DependencyInjection/Compiler/RegisterHookListenersPassTest.php"

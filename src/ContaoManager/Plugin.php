@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2013-2019 Contao Community Alliance.
+ * (c) 2019 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,24 +12,23 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2013-2019 Contao Community Alliance.
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2019 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill\ContaoManager;
+declare(strict_types = 1);
+
+namespace ContaoCommunityAlliance\Polyfills\ContaoManager;
 
 use Contao\CoreBundle\ContaoCoreBundle;
 use Contao\ManagerPlugin\Bundle\BundlePluginInterface;
 use Contao\ManagerPlugin\Bundle\Config\BundleConfig;
 use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
-use ContaoCommunityAlliance\Polyfill\CcaContaoPolyfillBundle;
-use ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\CcaPolyfillTaggedHooksBundle;
-use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion44Bundle;
-use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion45Bundle;
-use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion46Bundle;
-use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersion47Bundle;
-use ContaoCommunityAlliance\Polyfill\VersionBundle\CcaContaoPolyfillVersionNoneBundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill45\CcaContaoPolyfill45Bundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill47\CcaContaoPolyfill47Bundle;
 use PackageVersions\Versions;
 
 /**
@@ -42,59 +41,52 @@ class Plugin implements BundlePluginInterface
      */
     public function getBundles(ParserInterface $parser)
     {
-        return [
-            BundleConfig::create(CcaContaoPolyfillBundle::class)
-                ->setLoadAfter(
-                    [
-                        ContaoCoreBundle::class
-                    ]
-                ),
-            BundleConfig::create($this->getVersionBundle())
-                ->setLoadAfter(
-                    [
-                        CcaContaoPolyfillBundle::class
-                    ]
-                ),
-            BundleConfig::create(CcaPolyfillTaggedHooksBundle::class)
-                ->setLoadAfter(
-                    [
-                        CcaContaoPolyfillVersion44Bundle::class
-                    ]
-                )
-        ];
+        $bundles     = [];
+        $coreVersion = $this->getContaoCoreVersion();
+        $loadAfter   = [ContaoCoreBundle::class];
+        if (0 === strncmp($coreVersion, 'dev-master', 10)) {
+            return [];
+        }
+
+        foreach ([
+            CcaContaoPolyfill45Bundle::class => '4.5',
+            CcaContaoPolyfill46Bundle::class => '4.6',
+            CcaContaoPolyfill47Bundle::class => '4.7',
+        ] as $bundleClass => $untilVersion) {
+            if (!$this->acceptVersion($coreVersion, $untilVersion)) {
+                continue;
+            }
+            $bundles[]   = BundleConfig::create($bundleClass)->setLoadAfter($loadAfter);
+            $loadAfter[] = $bundleClass;
+        }
+
+        return $bundles;
     }
 
     /**
-     * Get the version bundle of the installed Contao version.
+     * Obtain the Contao core version.
      *
      * @return string
+     *
+     * @internal Only protected to allow unit testing.
+     *
+     * @codeCoverageIgnore - This is in fact only here to mock.
      */
-    private function getVersionBundle(): string
+    protected function getContaoCoreVersion(): string
     {
-        $version = \ltrim(\strstr(Versions::getVersion('contao/core-bundle'), '@', true), 'v');
+        return Versions::getVersion('contao/core-bundle');
+    }
 
-        $bundles = [
-            '4.4.0'      => CcaContaoPolyfillVersion44Bundle::class,
-            '4.5.0'      => CcaContaoPolyfillVersion45Bundle::class,
-            '4.6.0'      => CcaContaoPolyfillVersion46Bundle::class,
-            '4.7.0'      => CcaContaoPolyfillVersion47Bundle::class
-        ];
-
-        $bundles['dev-master'] = \end($bundles);
-
-        $detectedBundleClass = null;
-        foreach ($bundles as $bundleVersion => $bundleClass) {
-            if (!\version_compare($bundleVersion, $version, '<=')) {
-                continue;
-            }
-
-            if (!(float) $bundleVersion && $detectedBundleClass) {
-                continue;
-            }
-
-            $detectedBundleClass = $bundleClass;
-        }
-
-        return $detectedBundleClass ?? CcaContaoPolyfillVersionNoneBundle::class;
+    /**
+     * Test if a version is accepted.
+     *
+     * @param string $coreVersion  The version of the installed Contao core.
+     * @param string $untilVersion The most recent version that is acceptable.
+     *
+     * @return bool
+     */
+    private function acceptVersion(string $coreVersion, string $untilVersion): bool
+    {
+        return version_compare($coreVersion, $untilVersion, '<=');
     }
 }

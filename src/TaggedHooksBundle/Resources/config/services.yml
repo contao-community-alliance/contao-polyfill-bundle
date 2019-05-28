@@ -1,6 +1,0 @@
-services:
-    cca.contao_polyfill_tagged_hooks.controller.register_hook_listener:
-        class: ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\Controller\RegisterHookListenersController
-        public: true
-        arguments:
-            - # This argument has the hook listener. It added with the register hook listener compiler.

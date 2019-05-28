@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2013-2019 Contao Community Alliance.
+ * (c) 2019 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -11,17 +11,21 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
- * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     David Molineus <mail@netzmacht.de>
  * @author     Leo Feyer <github@contao.org>
  * @author     Andreas Schempp <andreas.schempp@terminal42.ch>
- * @copyright  2013-2019 Contao Community Alliance.
+ * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2019 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\DependencyInjection\Compiler;
+declare(strict_types = 1);
 
+namespace ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler;
+
+use ContaoCommunityAlliance\Polyfills\Polyfill45\Initialization\HookListenerRegistrar;
 use Symfony\Component\Config\Definition\Exception\InvalidConfigurationException;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -29,30 +33,32 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * The compiler for register hook listeners.
  */
-class RegisterHookListenersCompiler implements CompilerPassInterface
+class RegisterHookListenersPass implements CompilerPassInterface
 {
     /**
      * {@inheritdoc}
      */
     public function process(ContainerBuilder $container): void
     {
-        $registerHookListener = 'cca.contao_polyfill_tagged_hooks.controller.register_hook_listener';
-        if (false === $container->hasDefinition($registerHookListener)) {
+        if (false === $container->hasDefinition(HookListenerRegistrar::class)) {
+            return;
+        }
+
+        $hooks = $this->getHooks($container);
+        if (empty($hooks)) {
             return;
         }
 
         $paths   = $container->getParameter('contao.resources_paths');
-        $paths[] = \dirname(__DIR__, 2) . '/Resources/contao-polyfill';
+        $paths[] = \dirname(__DIR__, 2) . '/Resources/hook-polyfill';
         $container->setParameter('contao.resources_paths', $paths);
-
-        $hooks = $this->getHooks($container);
 
         // Sort the listeners by priority
         foreach (\array_keys($hooks) as $hook) {
             \krsort($hooks[$hook]);
         }
 
-        $container->getDefinition($registerHookListener)->replaceArgument(0, $hooks);
+        $container->getDefinition(HookListenerRegistrar::class)->replaceArgument(0, $hooks);
     }
 
     /**
@@ -71,6 +77,8 @@ class RegisterHookListenersCompiler implements CompilerPassInterface
             foreach ($tags as $attributes) {
                 $this->addHookCallback($hooks, $serviceId, $attributes);
             }
+
+            $container->findDefinition($serviceId)->setPublic(true);
         }
 
         return $hooks;
@@ -83,7 +91,9 @@ class RegisterHookListenersCompiler implements CompilerPassInterface
      * @param string $serviceId  The service id.
      * @param array  $attributes The attributes.
      *
-     * @throws InvalidConfigurationException
+     * @return void
+     *
+     * @throws InvalidConfigurationException When the hook attribute is missing.
      */
     private function addHookCallback(array &$hooks, string $serviceId, array $attributes): void
     {

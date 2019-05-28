@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2013-2019 Contao Community Alliance.
+ * (c) 2019 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,12 +12,15 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2013-2019 Contao Community Alliance.
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2019 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\DependencyInjection;
+declare(strict_types = 1);
+
+namespace ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
@@ -33,16 +36,17 @@ final class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder('cca_polyfill_tagged_hooks');
+        $treeBuilder = new TreeBuilder('cca_polyfill45');
         /** @var ArrayNodeDefinition $rootNode */
         $rootNode = \method_exists($treeBuilder, 'getRootNode')
             ? $treeBuilder->getRootNode()
-                : $treeBuilder->root('cca_polyfill_tagged_hooks');
+                : $treeBuilder->root('cca_polyfill45');
 
         $rootNode
+            ->addDefaultsIfNotSet()
             ->children()
-                ->booleanNode('is_active')
-                    ->info('For disable cca_polyfill_tagged_hooks set is_active to false.')
+                ->booleanNode('tagged_hooks')
+                    ->info('Register HOOKs as tagged services.')
                     ->defaultTrue()
                 ->end()
             ->end();

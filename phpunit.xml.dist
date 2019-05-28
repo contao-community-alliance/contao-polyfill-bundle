@@ -15,7 +15,7 @@
 >
     <testsuites>
         <testsuite name="contao-ployfill-bundle test suite">
-            <directory>./tests/Test/</directory>
+            <directory>./tests/</directory>
         </testsuite>
     </testsuites>
 

@@ -31,7 +31,9 @@
         "php": "^7.1",
         "contao/core-bundle": "^4.4",
         "ocramius/package-versions": "^1.4",
-        "symfony/dependency-injection": "^3.4"
+        "symfony/config": "^3.4 || ^4.0",
+        "symfony/dependency-injection": "^3.4 || ^4.0",
+        "symfony/http-kernel": "^3.4 || ^4.0"
     },
     "require-dev": {
         "phpcq/all-tasks": "^1.2",
@@ -40,16 +42,16 @@
     },
     "autoload": {
         "psr-4": {
-            "ContaoCommunityAlliance\\Polyfill\\": "src/"
+            "ContaoCommunityAlliance\\Polyfills\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "ContaoCommunityAlliance\\Polyfill\\Test\\": "tests/Test/"
+            "ContaoCommunityAlliance\\Polyfills\\Test\\": "tests/"
         }
     },
     "extra": {
-        "contao-manager-plugin": "ContaoCommunityAlliance\\Polyfill\\ContaoManager\\Plugin",
+        "contao-manager-plugin": "ContaoCommunityAlliance\\Polyfills\\ContaoManager\\Plugin",
         "branch-alias": {
             "dev-master": "1.0.x-dev"
         }

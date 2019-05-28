@@ -1,0 +1,5 @@
+services:
+  ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\Controller\RegisterHookListenersController:
+    public: true
+    arguments:
+      - [] # This argument is filled by the compiler pass.

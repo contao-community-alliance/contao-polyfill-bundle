@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2013-2019 Contao Community Alliance.
+ * (c) 2019 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,22 +12,25 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2013-2019 Contao Community Alliance.
+ * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @copyright  2019 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-namespace ContaoCommunityAlliance\Polyfill\TaggedHooksBundle;
+declare(strict_types = 1);
 
-use ContaoCommunityAlliance\Polyfill\TaggedHooksBundle\DependencyInjection\Compiler\RegisterHookListenersCompiler;
+namespace ContaoCommunityAlliance\Polyfills\Polyfill45;
+
+use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\RegisterHookListenersPass;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 /**
- * The polyfill bundle for tagged hooks.
+ * Provides polyfills from Contao version 4.5.x.
  */
-final class CcaPolyfillTaggedHooksBundle extends Bundle
+final class CcaContaoPolyfill45Bundle extends Bundle
 {
     /**
      * {@inheritDoc}
@@ -36,6 +39,6 @@ final class CcaPolyfillTaggedHooksBundle extends Bundle
     {
         parent::build($container);
 
-        $container->addCompilerPass(new RegisterHookListenersCompiler(), PassConfig::TYPE_OPTIMIZE);
+        $container->addCompilerPass(new RegisterHookListenersPass(), PassConfig::TYPE_OPTIMIZE);
     }
 }
