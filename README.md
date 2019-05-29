@@ -6,8 +6,42 @@
 Contao Polyfill Bundle
 ======================
 
-This polyfill bundle support some Contao features in older versions.
+This bundle allows you to use Contao features in earlier versions.
 
-Provided Contao features:
--------------------------
-- Hooks as tagged service in Contao installed version < 4.5
+For every single feature there is the possibility to deactivate it. See the corresponding description.
+
+The following functions are backported in the package:
+
+Tagged Hooks
+------------
+
+This feature is automatically loaded in Contao versions less than 4.5.
+
+What this feature entails, you can read in the Contao docu.
+
+If you want to disable this, add the following to your config.yml.
+
+```yaml
+cca_polyfill45:
+    tagged_hooks: false
+
+```
+
+
+Asset
+-----
+
+This feature is automatically loaded in Contao versions less than 4.5.
+
+What this feature entails, you can read in the Contao docu.
+
+The function to include asset `$this->asset()` via the template is not supported. 
+You can use the insert tag `{{asset::path}}` as a replacement.
+
+If you want to disable this, add the following to your config.yml.
+
+```yaml
+cca_polyfill45:
+    asset: false
+
+```
