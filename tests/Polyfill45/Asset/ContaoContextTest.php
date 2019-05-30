@@ -190,7 +190,7 @@ class ContaoContextTest extends TestCase
         $this->assertFalse($context->isSecure());
     }
 
-    private function getPageWithDetails()
+    private function getPageWithDetails(): PageModel
     {
         $finder = new ResourceFinder(\dirname(__DIR__) . '/Fixtures/vendor/contao/test-bundle/Resources/contao');
 
@@ -268,7 +268,7 @@ class ContaoContextTest extends TestCase
      *
      * @return void
      */
-    private static function aliasContaoClass($class)
+    private static function aliasContaoClass(string $class): void
     {
         // Class.
         if (!\class_exists($class, true) && \class_exists('\\Contao\\' . $class, true)) {
