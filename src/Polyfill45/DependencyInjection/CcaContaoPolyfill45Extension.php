@@ -38,7 +38,7 @@ final class CcaContaoPolyfill45Extension extends Extension
     public function load(array $configs, ContainerBuilder $container): void
     {
         $config = $this->processConfiguration($this->getConfiguration($configs, $container), $configs);
-        $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new YamlFileLoader($container, new FileLocator(\dirname(__DIR__) . '/Resources/config'));
 
         if ($config['tagged_hooks']) {
             $loader->load('tagged_hooks.yml');
