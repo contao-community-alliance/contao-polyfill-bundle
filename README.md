@@ -18,7 +18,7 @@ Tagged Hooks
 
 This feature is automatically loaded in Contao versions less than 4.5.
 
-What this feature entails, you can read in the [here][tagged_hooks_doc].
+What this feature entails, you can read [here][tagged_hooks_doc].
 
 If you want to disable this, add the following to your config.yml.
 
@@ -34,7 +34,7 @@ Asset
 
 This feature is automatically loaded in Contao versions less than 4.5.
 
-What this feature entails, you can read in the [here][asset_doc].
+What this feature entails, you can read [here][asset_doc].
 
 The function to include asset `$this->asset()` via the template is not supported. 
 You can use the insert tag `{{asset::path}}` as a replacement.
