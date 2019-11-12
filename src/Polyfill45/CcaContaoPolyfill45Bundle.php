@@ -22,8 +22,10 @@ declare(strict_types = 1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill45;
 
+use Contao\CoreBundle\Util\PackageUtil as ContaoPackageUtil;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\AddAssetsPackagesPass;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\RegisterHookListenersPass;
+use ContaoCommunityAlliance\Polyfills\Polyfill45\Util\PackageUtil;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
@@ -33,6 +35,16 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
  */
 final class CcaContaoPolyfill45Bundle extends Bundle
 {
+    /**
+     * {@inheritDoc}
+     */
+    public function boot(): void
+    {
+        parent::boot();
+
+        \class_alias(PackageUtil::class, ContaoPackageUtil::class);
+    }
+
     /**
      * {@inheritDoc}
      */

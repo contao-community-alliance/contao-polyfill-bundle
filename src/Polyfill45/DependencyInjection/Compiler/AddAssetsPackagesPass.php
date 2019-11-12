@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler;
 
-use Contao\CoreBundle\Util\PackageUtil;
+use ContaoCommunityAlliance\Polyfills\Polyfill45\Util\PackageUtil;
 use PackageVersions\Versions;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;

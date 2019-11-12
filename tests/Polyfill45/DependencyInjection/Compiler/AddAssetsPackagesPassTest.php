@@ -23,7 +23,7 @@ namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill45\DependencyInjection\
 
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\CcaContaoPolyfill45Extension;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\AddAssetsPackagesPass;
-use ContaoCommunityAlliance\Polyfills\Test\Polyfill45\Fixtures\Util\PackageUtil;
+use ContaoCommunityAlliance\Polyfills\Polyfill45\Util\PackageUtil;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Asset\Packages;
 use Symfony\Component\Asset\VersionStrategy\EmptyVersionStrategy;
