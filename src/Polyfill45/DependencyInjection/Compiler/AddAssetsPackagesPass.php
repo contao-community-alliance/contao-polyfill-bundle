@@ -23,7 +23,7 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler;
 
-use ContaoCommunityAlliance\Polyfills\Test\Polyfill45\Fixtures\Util\PackageUtil;
+use ContaoCommunityAlliance\Polyfills\Polyfill45\Util\PackageUtil;
 use PackageVersions\Versions;
 use Symfony\Component\DependencyInjection\ChildDefinition;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
@@ -62,7 +62,7 @@ class AddAssetsPackagesPass implements CompilerPassInterface
     private function addBundles(ContainerBuilder $container): void
     {
         $packages = $container->getDefinition('assets.packages');
-        $context  = new Reference('contao.assets.assets_context');
+        $context  = new Reference('contao.assets.plugins_context');
 
         if ($container->hasDefinition('assets._version_default')) {
             $version = new Reference('assets._version_default');
@@ -106,7 +106,7 @@ class AddAssetsPackagesPass implements CompilerPassInterface
     private function addComponents(ContainerBuilder $container): void
     {
         $packages = $container->getDefinition('assets.packages');
-        $context  = new Reference('contao.assets.assets_context');
+        $context  = new Reference('contao.assets.plugins_context');
 
         foreach (Versions::VERSIONS as $name => $version) {
             if (0 !== \strncmp('contao-components/', $name, 18)) {

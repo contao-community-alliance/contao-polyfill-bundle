@@ -8,7 +8,7 @@ copy-left:
     - "Polyfill45/DependencyInjection/Compiler/AddAssetsPackagesPass.php"
     - "Polyfill45/EventListener/InsertTags/AssetListener.php"
     - "Polyfill45/EventListener/InsertTags/AssetListenerTest.php"
-    - "Polyfill45/Fixtures/Util/PackageUtil.php"
+    - "Polyfill45/Util/PackageUtil.php"
     - "Polyfill45/DependencyInjection/Compiler/AddAssetsPackagesPassTest.php"
     - "Polyfill45/Asset/ContaoContextTest.php"
   "David Molineus <mail@netzmacht.de>":
@@ -25,6 +25,6 @@ copy-left:
     - "Polyfill45/DependencyInjection/Compiler/AddAssetsPackagesPass.php"
     - "Polyfill45/EventListener/InsertTags/AssetListener.php"
     - "Polyfill45/EventListener/InsertTags/AssetListenerTest.php"
-    - "Polyfill45/Fixtures/Util/PackageUtil.php"
+    - "Polyfill45/Util/PackageUtil.php"
     - "Polyfill45/DependencyInjection/Compiler/AddAssetsPackagesPassTest.php"
     - "Polyfill45/Asset/ContaoContextTest.php"
