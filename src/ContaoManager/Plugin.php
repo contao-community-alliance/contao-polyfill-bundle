@@ -29,6 +29,7 @@ use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\CcaContaoPolyfill45Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill47\CcaContaoPolyfill47Bundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\CcaContaoPolyfill48Bundle;
 use PackageVersions\Versions;
 
 /**
@@ -52,6 +53,7 @@ class Plugin implements BundlePluginInterface
             CcaContaoPolyfill45Bundle::class => '4.5',
             CcaContaoPolyfill46Bundle::class => '4.6',
             CcaContaoPolyfill47Bundle::class => '4.7',
+            CcaContaoPolyfill48Bundle::class => '4.8',
         ] as $bundleClass => $untilVersion) {
             if (!$this->acceptVersion($coreVersion, $untilVersion)) {
                 continue;
