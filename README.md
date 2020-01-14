@@ -48,5 +48,22 @@ cca_polyfill45:
 ```
 
 
+Migration
+---------
+
+This feature is automatically loaded in Contao versions less than 4.9.
+
+What this feature entails, you can read [here][migration_doc].
+
+If you want to disable this, add the following to your config.yml.
+
+```yaml
+cca_polyfill48:
+    migration: false
+
+```
+
+
 [tagged_hooks_doc]: https://github.com/contao/core-bundle/commit/e700e191a19c68d67cfd1b0ee694d60c5f29baa0 "Read on github.com/contao/core-bundle"
 [asset_doc]: https://github.com/contao/core-bundle/commit/eed0aea3682b2bba28ed26d796b18605b459445e "Read on github.com/contao/core-bundle"
+[migration_doc]: https://github.com/contao/core-bundle/issues/1223#issuecomment-527111644 "Read on github.com/contao/core-bundle"

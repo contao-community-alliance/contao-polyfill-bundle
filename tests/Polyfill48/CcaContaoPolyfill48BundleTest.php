@@ -22,7 +22,9 @@ declare(strict_types = 1);
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill48;
 
 use ContaoCommunityAlliance\Polyfills\Polyfill48\CcaContaoPolyfill48Bundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\DependencyInjection\Compiler\TaggedMigrationsPass;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * Test.
@@ -39,5 +41,21 @@ class CcaContaoPolyfill48BundleTest extends TestCase
     public function testInstantiation(): void
     {
         $this->assertInstanceOf(CcaContaoPolyfill48Bundle::class, new CcaContaoPolyfill48Bundle());
+    }
+
+    public function testRegistersCompilerPass(): void
+    {
+        $bundle = new CcaContaoPolyfill48Bundle();
+
+        $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
+        $container
+            ->expects($this->once())
+            ->method('addCompilerPass')
+            ->withConsecutive(
+                [$this->isInstanceOf(TaggedMigrationsPass::class)]
+            )
+            ->willReturn($container);
+
+        $bundle->build($container);
     }
 }

@@ -1,0 +1,26 @@
+services:
+    ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection: ~
+
+    ContaoCommunityAlliance\Polyfills\Polyfill48\Hook\RunMigrationsHook:
+        public: true
+        arguments:
+            - '@ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection'
+        tags:
+            -   name: contao.hook
+                hook: sqlCompileCommands
+                method: __invoke
+                priority: 9999
+
+    ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller:
+        public: true
+        arguments:
+            - '@database_connection'
+
+    ContaoCommunityAlliance\Polyfills\Polyfill48\Command\MigrateCommand:
+        public: true
+        arguments:
+            - '@ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection'
+            - '@contao.resource_locator'
+            - '%kernel.project_dir%'
+            - '@contao.framework'
+            - '@?ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller'

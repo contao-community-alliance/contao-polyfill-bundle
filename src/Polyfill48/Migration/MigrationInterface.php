@@ -12,31 +12,39 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Martin Auswöger <martin@auswoeger.com>
  * @copyright  2019-2020 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace ContaoCommunityAlliance\Polyfills\Polyfill48;
-
-use ContaoCommunityAlliance\Polyfills\Polyfill48\DependencyInjection\Compiler\TaggedMigrationsPass;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\HttpKernel\Bundle\Bundle;
+namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Migration;
 
 /**
- * Provides polyfills from Contao version 4.8.x.
+ * The interface for migration.
  */
-final class CcaContaoPolyfill48Bundle extends Bundle
+interface MigrationInterface
 {
     /**
-     * {@inheritDoc}
+     * The name of the migration.
+     *
+     * @return string
      */
-    public function build(ContainerBuilder $container)
-    {
-        parent::build($container);
+    public function getName(): string;
 
-        $container->addCompilerPass(new TaggedMigrationsPass());
-    }
+    /**
+     * Should run the migration.
+     *
+     * @return bool
+     */
+    public function shouldRun(): bool;
+
+    /**
+     * Run the migration.
+     *
+     * @return MigrationResult
+     */
+    public function run(): MigrationResult;
 }
