@@ -24,8 +24,8 @@ namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill48\Command;
 use Contao\CoreBundle\Framework\ContaoFramework;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Command\MigrateCommand;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResult;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResultPolyFill;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Tester\CommandTester;
@@ -63,7 +63,7 @@ final class MigrateCommandTest extends TestCase
     {
         $command = $this->getCommand(
             [['Migration 1', 'Migration 2']],
-            [[new MigrationResult(true, 'Result 1'), new MigrationResult(true, 'Result 2')]]
+            [[new MigrationResultPolyFill(true, 'Result 1'), new MigrationResultPolyFill(true, 'Result 2')]]
         );
 
         $tester = new CommandTester($command);
@@ -152,7 +152,7 @@ final class MigrateCommandTest extends TestCase
     {
         $command = $this->getCommand(
             [['Migration 1', 'Migration 2']],
-            [[new MigrationResult(true, 'Result 1'), new MigrationResult(true, 'Result 2')]]
+            [[new MigrationResultPolyFill(true, 'Result 1'), new MigrationResultPolyFill(true, 'Result 2')]]
         );
 
         $tester = new CommandTester($command);
@@ -173,7 +173,7 @@ final class MigrateCommandTest extends TestCase
     {
         $command = $this->getCommand(
             [['Migration 1', 'Migration 2']],
-            [[new MigrationResult(false, 'Result 1'), new MigrationResult(true, 'Result 2')]]
+            [[new MigrationResultPolyFill(false, 'Result 1'), new MigrationResultPolyFill(true, 'Result 2')]]
         );
 
         $tester = new CommandTester($command);
@@ -192,10 +192,10 @@ final class MigrateCommandTest extends TestCase
     }
 
     /**
-     * @param array<array<string>>          $pendingMigrations
-     * @param array<array<MigrationResult>> $migrationResults
-     * @param array<array<string>>          $runonceFiles
-     * @param MigrationInstaller&MockObject $installer
+     * @param array<array<string>>                  $pendingMigrations
+     * @param array<array<MigrationResultPolyFill>> $migrationResults
+     * @param array<array<string>>                  $runonceFiles
+     * @param MigrationInstaller&MockObject         $installer
      */
     private function getCommand(
         array $pendingMigrations = [],
@@ -203,7 +203,7 @@ final class MigrateCommandTest extends TestCase
         array $runonceFiles = [],
         MigrationInstaller $installer = null
     ): MigrateCommand {
-        $migrations = $this->createMock(MigrationCollection::class);
+        $migrations = $this->createMock(MigrationCollectionPolyFill::class);
 
         $pendingMigrations[] = [];
         $pendingMigrations[] = [];

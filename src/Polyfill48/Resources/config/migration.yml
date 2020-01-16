@@ -1,26 +1,39 @@
 services:
-    ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection: ~
+    ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill: ~
+
+    ContaoCommunityAlliance\Polyfills\Polyfill48\Controller\MigrationController:
+        public: false
+        arguments:
+            - '@Contao\CoreBundle\Migration\MigrationCollection'
 
     ContaoCommunityAlliance\Polyfills\Polyfill48\Hook\RunMigrationsHook:
-        public: true
+        public: false
         arguments:
-            - '@ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection'
+            - '@ContaoCommunityAlliance\Polyfills\Polyfill48\Controller\MigrationController'
         tags:
             -   name: contao.hook
                 hook: sqlCompileCommands
                 method: __invoke
                 priority: 9999
 
-    ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller:
-        public: true
+    ContaoCommunityAlliance\Polyfills\Polyfill48\Factory\ServiceFactory:
+        public: false
         arguments:
+            - '@contao.framework'
             - '@database_connection'
+            - '@contao.doctrine.schema_provider'
+
+    ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller:
+        factory: [ '@ContaoCommunityAlliance\Polyfills\Polyfill48\Factory\ServiceFactory', 'createMigrationInstaller' ]
+        public: false
 
     ContaoCommunityAlliance\Polyfills\Polyfill48\Command\MigrateCommand:
-        public: true
+        public: false
         arguments:
-            - '@ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection'
+            - '@Contao\CoreBundle\Migration\MigrationCollection'
             - '@contao.resource_locator'
             - '%kernel.project_dir%'
             - '@contao.framework'
-            - '@?ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller'
+            - '@ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller'
+        tags:
+            -   name: console.command

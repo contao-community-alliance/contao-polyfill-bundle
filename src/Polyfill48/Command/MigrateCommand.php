@@ -22,9 +22,12 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Command;
 
+use Contao\Controller;
+use Contao\CoreBundle\Framework\Adapter;
 use Contao\CoreBundle\Framework\ContaoFramework;
+use Contao\System;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill;
 use Symfony\Component\Config\Exception\FileLocatorFileNotFoundException;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Console\Command\Command;
@@ -42,7 +45,7 @@ final class MigrateCommand extends Command
     /**
      * The migration collection.
      *
-     * @var MigrationCollection
+     * @var MigrationCollectionPolyFill
      */
     private $migrations;
 
@@ -84,18 +87,18 @@ final class MigrateCommand extends Command
     /**
      * The constructor.
      *
-     * @param MigrationCollection     $migrations  The migration collection.
-     * @param FileLocator             $fileLocator The file locator.
-     * @param string                  $projectDir  The project dir.
-     * @param ContaoFramework         $framework   The framework.
-     * @param MigrationInstaller|null $installer   The installer.
+     * @param MigrationCollectionPolyFill $migrations  The migration collection.
+     * @param FileLocator                 $fileLocator The file locator.
+     * @param string                      $projectDir  The project dir.
+     * @param ContaoFramework             $framework   The framework.
+     * @param MigrationInstaller          $installer   The installer.
      */
     public function __construct(
-        MigrationCollection $migrations,
+        MigrationCollectionPolyFill $migrations,
         FileLocator $fileLocator,
         string $projectDir,
         ContaoFramework $framework,
-        MigrationInstaller $installer = null
+        MigrationInstaller $installer
     ) {
         $this->migrations  = $migrations;
         $this->fileLocator = $fileLocator;

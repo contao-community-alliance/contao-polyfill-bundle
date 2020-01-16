@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Hook;
 
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Controller\MigrationController;
 
 /**
  * The hook for run the migrations.
@@ -29,20 +29,13 @@ use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection;
 final class RunMigrationsHook
 {
     /**
-     * The collection of migrations.
-     *
-     * @var MigrationCollection
+     * @var MigrationController
      */
-    private $migrations;
+    private $controller;
 
-    /**
-     * The constructor.
-     *
-     * @param MigrationCollection $migrations The collection of migrations.
-     */
-    public function __construct(MigrationCollection $migrations)
+    public function __construct(MigrationController $controller)
     {
-        $this->migrations = $migrations;
+        $this->controller = $controller;
     }
 
     /**
@@ -50,14 +43,10 @@ final class RunMigrationsHook
      *
      * @return array
      */
-    public function __invoke(): array
+    public function __invoke(array $sqlCommands): array
     {
-        $messages = [];
+        $this->controller->__invoke();
 
-        foreach ($this->migrations->run() as $migrationResult) {
-            $messages[] = $migrationResult->getMessage();
-        }
-
-        return $messages;
+        return $sqlCommands;
     }
 }

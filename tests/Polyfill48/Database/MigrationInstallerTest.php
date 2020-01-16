@@ -30,15 +30,10 @@ use PHPUnit\Framework\TestCase;
  */
 class MigrationInstallerTest extends TestCase
 {
-    /**
-     * @inheritdoc
-     */
-    public static function setUpBeforeClass(): void
+    protected function setUp()
     {
-        parent::setUpBeforeClass();
-        // Some class mapping for Contao 4.4.
-        self::aliasContaoClass('System');
-        self::aliasContaoClass('Controller');
+        parent::setUp();
+        self::markTestSkipped('The tests for the class ' . __CLASS__ . ' are all skipped.');
     }
 
     /**
@@ -46,69 +41,6 @@ class MigrationInstallerTest extends TestCase
      */
     public function test__construct()
     {
-        self::markTestIncomplete();
-    }
-
-    /**
-     * Test.
-     *
-     * @return void
-     */
-    public function testGetCommands(): void
-    {
-        self::markTestIncomplete();
-    }
-
-    /**
-     * Test.
-     *
-     * @return void
-     */
-    public function testExecCommand(): void
-    {
-        self::markTestIncomplete();
-    }
-
-    /**
-     * Test.
-     *
-     * @return void
-     */
-    public function testCompileCommands(): void
-    {
-        self::markTestIncomplete();
-    }
-
-    /**
-     * Mapping between root namespace of contao and the contao namespace.
-     * Can map class, interface and trait.
-     *
-     * @param string $class The name of the class
-     *
-     * @return void
-     */
-    private static function aliasContaoClass(string $class): void
-    {
-        // Class.
-        if (!\class_exists($class, true) && \class_exists('\\Contao\\' . $class, true)) {
-            if (!\class_exists($class, false)) {
-                \class_alias('\\Contao\\' . $class, $class);
-            }
-            return;
-        }
-        // Trait.
-        if (!\trait_exists($class, true) && \trait_exists('\\Contao\\' . $class, true)) {
-            if (!\trait_exists($class, false)) {
-                \class_alias('\\Contao\\' . $class, $class);
-            }
-            return;
-        }
-        // Interface.
-        if (!\interface_exists($class, true) && \interface_exists('\\Contao\\' . $class, true)) {
-            if (!\interface_exists($class, false)) {
-                \class_alias('\\Contao\\' . $class, $class);
-            }
-            return;
-        }
+        // Do nothing.
     }
 }

@@ -22,6 +22,9 @@ declare(strict_types = 1);
 namespace ContaoCommunityAlliance\Polyfills\Polyfill48;
 
 use ContaoCommunityAlliance\Polyfills\Polyfill48\DependencyInjection\Compiler\TaggedMigrationsPass;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationInterfacePolyFill;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResultPolyFill;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
@@ -33,10 +36,34 @@ final class CcaContaoPolyfill48Bundle extends Bundle
     /**
      * {@inheritDoc}
      */
+    public function boot(): void
+    {
+        parent::boot();
+
+        if ($this->isMigrationEnable()) {
+            \class_alias(MigrationCollectionPolyFill::class, \Contao\CoreBundle\Migration\MigrationCollection::class);
+            \class_alias(MigrationInterfacePolyFill::class, \Contao\CoreBundle\Migration\MigrationInterface::class);
+            \class_alias(MigrationResultPolyFill::class, \Contao\CoreBundle\Migration\MigrationResult::class);
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
     public function build(ContainerBuilder $container)
     {
         parent::build($container);
 
         $container->addCompilerPass(new TaggedMigrationsPass());
+    }
+
+    /**
+     * Is the migration polyfill is enabled.
+     *
+     * @return bool
+     */
+    private function isMigrationEnable(): bool
+    {
+        return $this->container->has(MigrationCollectionPolyFill::class);
     }
 }

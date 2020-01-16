@@ -21,7 +21,7 @@ declare(strict_types = 1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill48\DependencyInjection;
 
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationInterface;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationInterfacePolyFill;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Extension\Extension;
@@ -44,7 +44,7 @@ final class CcaContaoPolyfill48Extension extends Extension
             $loader->load('migration.yml');
 
             $container
-                ->registerForAutoconfiguration(MigrationInterface::class)
+                ->registerForAutoconfiguration(MigrationInterfacePolyFill::class)
                 ->addTag('contao.migration');
         }
     }

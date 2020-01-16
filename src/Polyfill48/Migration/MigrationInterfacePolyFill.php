@@ -11,34 +11,46 @@
  * This project is provided in good faith and hope to be usable by anyone.
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
- * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Martin Auswöger <martin@auswoeger.com>
  * @copyright  2019-2020 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
-namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill46;
+namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Migration;
 
-use ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle;
-use PHPUnit\Framework\TestCase;
+use Contao\CoreBundle\Migration\MigrationResult;
 
 /**
- * Test.
+ * The interface for migration.
  *
- * @covers \ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle
+ * Make sure to use Contao\CoreBundle\Migration\MigrationInterface instead.
+ *
+ * @internal
  */
-class CcaContaoPolyfill46BundleTest extends TestCase
+interface MigrationInterfacePolyFill
 {
     /**
-     * Test.
+     * The name of the migration.
      *
-     * @return void
+     * @return string
      */
-    public function testInstantiation(): void
-    {
-        $this->assertInstanceOf(CcaContaoPolyfill46Bundle::class, new CcaContaoPolyfill46Bundle());
-    }
+    public function getName(): string;
+
+    /**
+     * Should run the migration.
+     *
+     * @return bool
+     */
+    public function shouldRun(): bool;
+
+    /**
+     * Run the migration.
+     *
+     * @return MigrationResult
+     */
+    public function run(): MigrationResult;
 }

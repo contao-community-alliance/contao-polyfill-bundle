@@ -12,39 +12,18 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @author     Martin Auswöger <martin@auswoeger.com>
  * @copyright  2019-2020 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
 
-declare(strict_types=1);
+// This file is only here to allow IDE auto-completion.
+// @codingStandardsIgnoreFile
 
-namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Migration;
-
-/**
- * The interface for migration.
- */
-interface MigrationInterface
-{
-    /**
-     * The name of the migration.
-     *
-     * @return string
-     */
-    public function getName(): string;
-
-    /**
-     * Should run the migration.
-     *
-     * @return bool
-     */
-    public function shouldRun(): bool;
-
-    /**
-     * Run the migration.
-     *
-     * @return MigrationResult
-     */
-    public function run(): MigrationResult;
+namespace Contao\CoreBundle\Migration {
+    if (false) {
+        interface MigrationInterface extends \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationInterfacePolyFill {}
+        class MigrationResult extends \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResultPolyFill {}
+        class MigrationCollection extends \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill {}
+    }
 }

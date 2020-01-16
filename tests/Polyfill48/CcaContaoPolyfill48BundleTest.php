@@ -17,7 +17,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill48;
 
@@ -41,6 +41,26 @@ class CcaContaoPolyfill48BundleTest extends TestCase
     public function testInstantiation(): void
     {
         $this->assertInstanceOf(CcaContaoPolyfill48Bundle::class, new CcaContaoPolyfill48Bundle());
+    }
+
+    public function testMigrationEnabled(): void
+    {
+        $container = $this
+            ->getMockBuilder(ContainerBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['has'])
+            ->getMock();
+        $container
+            ->expects(self::once())
+            ->method('has')
+            ->willReturn(true);
+        $bundle    = new CcaContaoPolyfill48Bundle();
+        $bundle->setContainer($container);
+        $bundle->boot();
+
+        self::assertTrue(\class_exists(\Contao\CoreBundle\Migration\MigrationCollection::class));
+        self::assertTrue(\interface_exists(\Contao\CoreBundle\Migration\MigrationInterface::class));
+        self::assertTrue(\class_exists(\Contao\CoreBundle\Migration\MigrationResult::class));
     }
 
     public function testRegistersCompilerPass(): void

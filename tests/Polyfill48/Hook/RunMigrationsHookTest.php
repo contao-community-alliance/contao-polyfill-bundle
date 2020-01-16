@@ -22,16 +22,16 @@ declare(strict_types=1);
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill48\Hook;
 
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Hook\RunMigrationsHook;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationInterface;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResult;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationInterfacePolyFill;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResultPolyFill;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test the run migration hook.
  *
  * @covers \ContaoCommunityAlliance\Polyfills\Polyfill48\Hook\RunMigrationsHook
- * @covers \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection
+ * @covers \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill
  */
 class RunMigrationsHookTest extends TestCase
 {
@@ -74,7 +74,7 @@ class RunMigrationsHookTest extends TestCase
      */
     public function testRunNotEmptyMigrationCollection(string $name, bool $shouldRun, bool $successful): void
     {
-        $migration = $this->createMock(MigrationInterface::class);
+        $migration = $this->createMock(MigrationInterfacePolyFill::class);
         $migration
             ->expects(self::never())
             ->method('getName')
@@ -86,9 +86,9 @@ class RunMigrationsHookTest extends TestCase
         $migration
             ->expects($shouldRun ? self::once() : self::never())
             ->method('run')
-            ->willReturn(new MigrationResult($successful, $name));
+            ->willReturn(new MigrationResultPolyFill($successful, $name));
 
-        $migrations = new MigrationCollection([$migration]);
+        $migrations = new MigrationCollectionPolyFill([$migration]);
 
         $hook = new RunMigrationsHook($migrations);
         $hook->__invoke();

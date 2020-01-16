@@ -22,7 +22,7 @@ declare(strict_types=1);
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill48\DependencyInjection\Compiler;
 
 use ContaoCommunityAlliance\Polyfills\Polyfill48\DependencyInjection\Compiler\TaggedMigrationsPass;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -37,7 +37,7 @@ class TaggedMigrationsPassTest extends TestCase
     public function testAddsTheMigrations(): void
     {
         $container = new ContainerBuilder();
-        $container->setDefinition(MigrationCollection::class, new Definition(MigrationCollection::class));
+        $container->setDefinition(MigrationCollectionPolyFill::class, new Definition(MigrationCollectionPolyFill::class));
 
         $migrations = [
             'Test\Migration1' => [],
@@ -61,10 +61,21 @@ class TaggedMigrationsPassTest extends TestCase
         $pass = new TaggedMigrationsPass();
         $pass->process($container);
 
-        $migrationServices = $container->getDefinition(MigrationCollection::class)->getArgument(0);
+        $migrationServices = $container->getDefinition(MigrationCollectionPolyFill::class)->getArgument(0);
 
         $this->assertSame(
             [
+                'Contao\InstallationBundle\Database\Version330Update',
+                'Contao\InstallationBundle\Database\Version350Update',
+                'Contao\InstallationBundle\Database\Version400Update',
+                'Contao\InstallationBundle\Database\Version410Update',
+                'Contao\InstallationBundle\Database\Version430Update',
+                'Contao\InstallationBundle\Database\Version440Update',
+                'Contao\InstallationBundle\Database\Version447Update',
+                'Contao\InstallationBundle\Database\Version450Update',
+                'Contao\InstallationBundle\Database\Version460Update',
+                'Contao\InstallationBundle\Database\Version470Update',
+                'Contao\InstallationBundle\Database\Version480Update',
                 'Test\Migration1PrioPositive1',
                 'Test\Migration1PrioPositive2',
                 'Test\Migration1PrioPositive12',

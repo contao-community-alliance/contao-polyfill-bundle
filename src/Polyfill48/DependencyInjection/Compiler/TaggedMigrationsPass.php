@@ -22,10 +22,16 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill48\DependencyInjection\Compiler;
 
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection;
+use Contao\CoreBundle\Migration\MigrationCollection;
+use Contao\InstallationBundle\Database\AbstractVersionUpdate;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationWrapper;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 
 /**
  * The compiler for register migration listeners.
@@ -41,17 +47,21 @@ final class TaggedMigrationsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->has(MigrationCollection::class)) {
+        if (!$container->has(MigrationCollectionPolyFill::class)) {
             return;
         }
 
-        $definition = $container->findDefinition(MigrationCollection::class);
+        $definition = $container->findDefinition(MigrationCollectionPolyFill::class);
         $services   = [];
 
         foreach ($container->findTaggedServiceIds('contao.migration', true) as $serviceId => $attributes) {
             $priority                    = ($attributes[0]['priority'] ?? 0);
             $class                       = $container->getDefinition($serviceId)->getClass();
             $services[$priority][$class] = new Reference($serviceId);
+        }
+
+        foreach ($this->taggedContaoUpdateServices($container) as $updateServiceId) {
+            $services[99][$updateServiceId] = new Reference($updateServiceId);
         }
 
         foreach (\array_keys($services) as $priority) {
@@ -66,5 +76,62 @@ final class TaggedMigrationsPass implements CompilerPassInterface
         }
 
         $definition->addArgument($services);
+
+        if (!$container->has(MigrationCollection::class)) {
+            $container->setAlias(MigrationCollection::class, MigrationCollectionPolyFill::class);
+        }
+    }
+
+    /**
+     * Tagged the contao update servcies.
+     *
+     * @param ContainerBuilder $container The container.
+     *
+     * @return array
+     */
+    private function taggedContaoUpdateServices(ContainerBuilder $container): array
+    {
+        $resourcePath = \dirname((new \ReflectionClass(AbstractVersionUpdate::class))->getFileName());
+
+        $finder = Finder::create()
+            ->files()
+            ->name('Version*Update.php')
+            ->sortByName()
+            ->in($resourcePath);
+
+        $services = [];
+        /** @var SplFileInfo $file */
+        foreach ($finder as $file) {
+            $class = 'Contao\InstallationBundle\Database\\' . $file->getBasename('.php');
+            if (false === (new \ReflectionClass($class))->isSubclassOf(AbstractVersionUpdate::class)) {
+                continue;
+            }
+
+            $definition = new Definition();
+            $definition
+                ->setClass(MigrationWrapper::class)
+                ->setPrivate(true)
+                ->setPublic(true)
+                ->setArguments(
+                    [
+                        new Reference('database_connection'),
+                        $class
+                    ]
+                )
+                ->setTags(
+                    [
+                        'contao.migration' => [
+                            [
+                                'priority' => 99
+                            ]
+                        ]
+                    ]
+                );
+
+            $container->setDefinition($class, $definition);
+            $services[] = $class;
+        }
+
+        return $services;
     }
 }

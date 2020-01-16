@@ -22,10 +22,17 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Migration;
 
+use Contao\CoreBundle\Migration\MigrationInterface;
+use Contao\CoreBundle\Migration\MigrationResult;
+
 /**
  * The collection of migrations.
+ *
+ * Make sure to use Contao\CoreBundle\Migration\MigrationCollection instead.
+ *
+ * @internal
  */
-class MigrationCollection
+class MigrationCollectionPolyFill
 {
     /**
      * The migrations.

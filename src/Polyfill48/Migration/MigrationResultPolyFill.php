@@ -24,8 +24,12 @@ namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Migration;
 
 /**
  * The result of migration.
+ *
+ * Make sure to use Contao\CoreBundle\Migration\MigrationResult instead.
+ *
+ * @internal
  */
-final class MigrationResult
+final class MigrationResultPolyFill
 {
     /**
      * Is the migration successful.

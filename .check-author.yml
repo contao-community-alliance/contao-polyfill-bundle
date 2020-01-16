@@ -29,6 +29,7 @@ copy-left:
     - "Polyfill45/DependencyInjection/Compiler/AddAssetsPackagesPassTest.php"
     - "Polyfill45/Asset/ContaoContextTest.php"
     - "Polyfill48/Database/Installer.php"
+    - "Polyfill48/Database/MigrationInstaller.php"
   "Martin Auswöger <martin@auswoeger.com>":
     - "Polyfill48/Command/MigrateCommand.php"
     - "Polyfill48/Database/Installer.php"
@@ -37,3 +38,7 @@ copy-left:
     - "Polyfill48/Migration/MigrationInterface.php"
     - "Polyfill48/Migration/MigrationResult.php"
     - "Polyfill48/Fixtures/AbstractMigration.php"
+    - "Polyfill48/Database/MigrationInstaller.php"
+    - "Polyfill48/Migration/MigrationCollectionPolyFill.php"
+    - "Polyfill48/Migration/MigrationInterfacePolyFill.php"
+    - "Polyfill48/Migration/MigrationResultPolyFill.php"

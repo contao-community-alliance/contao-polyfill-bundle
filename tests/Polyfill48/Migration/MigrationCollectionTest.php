@@ -21,16 +21,16 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill48\Migration;
 
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResult;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResultPolyFill;
 use ContaoCommunityAlliance\Polyfills\Test\Polyfill48\Fixtures\AbstractMigration;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test the migration collection.
  *
- * @covers \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollection
- * @covers \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResult
+ * @covers \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill
+ * @covers \ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResultPolyFill
  */
 class MigrationCollectionTest extends TestCase
 {
@@ -41,7 +41,7 @@ class MigrationCollectionTest extends TestCase
      */
     public function testGetPendingNames(): void
     {
-        $migrations        = new MigrationCollection($this->getMigrationServices());
+        $migrations        = new MigrationCollectionPolyFill($this->getMigrationServices());
         $pendingMigrations = $migrations->getPendingNames();
 
         if (!\is_array($pendingMigrations)) {
@@ -58,7 +58,7 @@ class MigrationCollectionTest extends TestCase
      */
     public function testRunMigrations(): void
     {
-        $migrations = new MigrationCollection($this->getMigrationServices());
+        $migrations = new MigrationCollectionPolyFill($this->getMigrationServices());
         $results    = $migrations->run();
 
         if (!\is_array($results)) {
@@ -66,10 +66,10 @@ class MigrationCollectionTest extends TestCase
         }
 
         $this->assertCount(2, $results);
-        $this->assertInstanceOf(MigrationResult::class, $results[0]);
+        $this->assertInstanceOf(MigrationResultPolyFill::class, $results[0]);
         $this->assertTrue($results[0]->isSuccessful());
         $this->assertSame('successful', $results[0]->getMessage());
-        $this->assertInstanceOf(MigrationResult::class, $results[1]);
+        $this->assertInstanceOf(MigrationResultPolyFill::class, $results[1]);
         $this->assertFalse($results[1]->isSuccessful());
         $this->assertSame('failing', $results[1]->getMessage());
     }
@@ -88,7 +88,7 @@ class MigrationCollectionTest extends TestCase
                     return true;
                 }
 
-                public function run(): MigrationResult
+                public function run(): MigrationResultPolyFill
                 {
                     return $this->createResult(true, 'successful');
                 }
@@ -104,7 +104,7 @@ class MigrationCollectionTest extends TestCase
                     return true;
                 }
 
-                public function run(): MigrationResult
+                public function run(): MigrationResultPolyFill
                 {
                     return $this->createResult(false, 'failing');
                 }
@@ -120,7 +120,7 @@ class MigrationCollectionTest extends TestCase
                     return false;
                 }
 
-                public function run(): MigrationResult
+                public function run(): MigrationResultPolyFill
                 {
                     throw new \LogicException('Should never be executed');
                 }

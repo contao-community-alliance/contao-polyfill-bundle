@@ -22,7 +22,7 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill48\Fixtures;
 
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResult;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationResultPolyFill;
 
 /**
  * The abstract migration fixture.
@@ -45,14 +45,14 @@ abstract class AbstractMigration
      * @param bool        $successful Is successful.
      * @param string|null $message The message.
      *
-     * @return MigrationResult
+     * @return MigrationResultPolyFill
      */
-    protected function createResult(bool $successful, string $message = null): MigrationResult
+    protected function createResult(bool $successful, string $message = null): MigrationResultPolyFill
     {
         if (null === $message) {
             $message = $this->getName().' '.($successful ? 'executed successfully' : 'execution failed');
         }
 
-        return new MigrationResult($successful, $message);
+        return new MigrationResultPolyFill($successful, $message);
     }
 }
