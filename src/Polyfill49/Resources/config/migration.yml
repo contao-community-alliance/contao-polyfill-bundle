@@ -44,3 +44,10 @@ services:
             - '@ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationInstaller'
         tags:
             -   name: console.command
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\FixVersion447Update:
+        arguments:
+            - '@database_connection'
+        tags:
+            -   name: contao.migration
+                priority: 100

@@ -24,13 +24,14 @@ namespace ContaoCommunityAlliance\Polyfills\Polyfill49\Database;
 use Contao\CoreBundle\Migration\MigrationInterface;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Contao\InstallationBundle\Database\AbstractVersionUpdate;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\AbstractMigration;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This migration wrapper is for the Contao version updater.
  */
-final class MigrationWrapper implements MigrationInterface
+final class MigrationWrapper extends AbstractMigration
 {
     /**
      * The Contao version updater.
@@ -80,12 +81,6 @@ final class MigrationWrapper implements MigrationInterface
             $successful = false;
         }
 
-        if (!$this->updater->hasMessage()) {
-            $message = $this->getName() . ' ' . ($successful ? 'executed successfully' : 'execution failed');
-        } else {
-            $message = $this->updater->getMessage();
-        }
-
-        return new MigrationResult($successful, $message);
+        return $this->createResult($successful, $this->updater->getMessage() ?: null);
     }
 }
