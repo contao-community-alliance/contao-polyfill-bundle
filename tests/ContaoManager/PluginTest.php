@@ -29,7 +29,7 @@ use ContaoCommunityAlliance\Polyfills\ContaoManager\Plugin;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\CcaContaoPolyfill45Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill47\CcaContaoPolyfill47Bundle;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\CcaContaoPolyfill48Bundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\CcaContaoPolyfill49Bundle;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -49,21 +49,19 @@ class PluginTest extends TestCase
                 CcaContaoPolyfill45Bundle::class,
                 CcaContaoPolyfill46Bundle::class,
                 CcaContaoPolyfill47Bundle::class,
-                CcaContaoPolyfill48Bundle::class
+                CcaContaoPolyfill49Bundle::class
             ],
             '4.5.0' => [
                 CcaContaoPolyfill46Bundle::class,
                 CcaContaoPolyfill47Bundle::class,
-                CcaContaoPolyfill48Bundle::class
+                CcaContaoPolyfill49Bundle::class
             ],
             '4.6.0' => [
                 CcaContaoPolyfill47Bundle::class,
-                CcaContaoPolyfill48Bundle::class
-            ],
-            '4.7.0' => [
-                CcaContaoPolyfill48Bundle::class
+                CcaContaoPolyfill49Bundle::class
             ],
             '4.8.0' => [
+                CcaContaoPolyfill49Bundle::class
             ],
             'dev-master@012345678' => [
             ],

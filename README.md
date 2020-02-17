@@ -58,7 +58,7 @@ What this feature entails, you can read [here][migration_doc].
 If you want to disable this, add the following to your config.yml.
 
 ```yaml
-cca_polyfill48:
+cca_polyfill49:
     migration: false
 
 ```
