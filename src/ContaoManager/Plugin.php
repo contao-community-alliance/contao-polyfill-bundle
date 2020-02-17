@@ -89,6 +89,13 @@ class Plugin implements BundlePluginInterface
      */
     private function acceptVersion(string $coreVersion, string $untilVersion): bool
     {
+        // Version compares for the branch alias develop.
+        if (false !== \strpos($coreVersion, 'x-dev')) {
+            \preg_match('/(\d+\.)+\d+/', $coreVersion, $matches);
+
+            return version_compare($matches[0], $untilVersion, '<');
+        }
+
         return version_compare($coreVersion, $untilVersion, '<=');
     }
 }
