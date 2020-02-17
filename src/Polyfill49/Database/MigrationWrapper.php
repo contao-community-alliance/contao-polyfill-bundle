@@ -25,6 +25,7 @@ use Contao\CoreBundle\Migration\MigrationInterface;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Contao\InstallationBundle\Database\AbstractVersionUpdate;
 use Doctrine\DBAL\Connection;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * This migration wrapper is for the Contao version updater.
@@ -41,12 +42,14 @@ final class MigrationWrapper implements MigrationInterface
     /**
      * MigrationWrapper constructor.
      *
-     * @param Connection $connection The database connection.
-     * @param string     $class      The class of the Contao version updater.
+     * @param ContainerInterface $container  The service container.
+     * @param Connection         $connection The database connection.
+     * @param string             $class      The class of the Contao version updater.
      */
-    public function __construct(Connection $connection, string $class)
+    public function __construct(ContainerInterface $container, Connection $connection, string $class)
     {
         $this->updater = new $class($connection);
+        $this->updater->setContainer($container);
     }
 
     /**

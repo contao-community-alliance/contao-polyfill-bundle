@@ -1,6 +1,10 @@
 services:
     ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill: ~
 
+    Contao\CoreBundle\Migration\MigrationCollection:
+        alias: ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill
+        public: true
+
     ContaoCommunityAlliance\Polyfills\Polyfill49\Controller\MigrationController:
         public: false
         calls:

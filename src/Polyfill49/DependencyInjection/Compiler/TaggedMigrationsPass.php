@@ -47,11 +47,12 @@ final class TaggedMigrationsPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container): void
     {
-        if (!$container->has(MigrationCollectionPolyFill::class)) {
+        if (!$container->hasDefinition(MigrationCollectionPolyFill::class)) {
             return;
         }
 
         $definition = $container->findDefinition(MigrationCollectionPolyFill::class);
+        $definition->setPublic(true);
         $services   = [];
 
         foreach ($container->findTaggedServiceIds('contao.migration', true) as $serviceId => $attributes) {
@@ -114,6 +115,7 @@ final class TaggedMigrationsPass implements CompilerPassInterface
                 ->setPublic(true)
                 ->setArguments(
                     [
+                        new Reference('service_container'),
                         new Reference('database_connection'),
                         $class
                     ]
