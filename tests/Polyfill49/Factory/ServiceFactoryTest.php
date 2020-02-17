@@ -12,7 +12,6 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @author     Martin Auswöger <martin@auswoeger.com>
  * @copyright  2019-2020 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -20,7 +19,7 @@
 
 declare(strict_types=1);
 
-namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill49;
+namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill49\Factory;
 
 use Contao\CoreBundle\Doctrine\Schema\DcaSchemaProvider;
 use Contao\CoreBundle\Framework\ContaoFramework;

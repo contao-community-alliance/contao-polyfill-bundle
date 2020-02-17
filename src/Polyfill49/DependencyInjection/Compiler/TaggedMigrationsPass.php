@@ -53,8 +53,8 @@ final class TaggedMigrationsPass implements CompilerPassInterface
 
         $definition = $container->findDefinition(MigrationCollectionPolyFill::class);
         $definition->setPublic(true);
-        $services   = [];
 
+        $services = [];
         foreach ($container->findTaggedServiceIds('contao.migration', true) as $serviceId => $attributes) {
             $priority                    = ($attributes[0]['priority'] ?? 0);
             $class                       = $container->getDefinition($serviceId)->getClass();

@@ -29,10 +29,18 @@ use Contao\CoreBundle\Migration\MigrationResult;
  */
 abstract class AbstractMigration implements MigrationInterface
 {
+    /**
+     * Create the migration result.
+     *
+     * @param bool        $successful Is successful.
+     * @param string|null $message    The message.
+     *
+     * @return MigrationResult
+     */
     protected function createResult(bool $successful, string $message = null): MigrationResult
     {
         if (null === $message) {
-            $message = $this->getName().' '.($successful ? 'executed successfully' : 'execution failed');
+            $message = $this->getName() . ' ' . ($successful ? 'executed successfully' : 'execution failed');
         }
 
         return new MigrationResult($successful, $message);

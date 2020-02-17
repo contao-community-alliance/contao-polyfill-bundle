@@ -62,6 +62,8 @@ final class MigrationApplicationListener
      * @param InitializeApplicationEvent $event The event.
      *
      * @return void
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __invoke(InitializeApplicationEvent $event): void
     {
