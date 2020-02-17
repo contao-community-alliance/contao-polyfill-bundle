@@ -12,7 +12,6 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @author     Martin Auswöger <martin@auswoeger.com>
  * @copyright  2019-2020 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -24,7 +23,6 @@ namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Factory;
 
 use Contao\CoreBundle\Doctrine\Schema\DcaSchemaProvider;
 use Contao\CoreBundle\Framework\ContaoFramework;
-use Contao\CoreBundle\Framework\ContaoFrameworkInterface;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller;
 use Doctrine\DBAL\Connection;
 use Symfony\Component\DependencyInjection\ContainerInterface;

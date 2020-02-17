@@ -25,7 +25,7 @@ use ContaoCommunityAlliance\Polyfills\Polyfill48\Command\MigrateCommand;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Controller\MigrationController;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Database\MigrationInstaller;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\DependencyInjection\CcaContaoPolyfill48Extension;
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Hook\RunMigrationsHook;
+use ContaoCommunityAlliance\Polyfills\Polyfill48\EventListener\MigrationApplicationListener;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Migration\MigrationCollectionPolyFill;
 use ContaoCommunityAlliance\Polyfills\Polyfill48\Factory\ServiceFactory;
 use PHPUnit\Framework\TestCase;
@@ -66,7 +66,7 @@ class CcaContaoPolyfill48ExtensionTest extends TestCase
             ->withConsecutive(
                 [MigrationCollectionPolyFill::class],
                 [MigrationController::class],
-                [RunMigrationsHook::class],
+                [MigrationApplicationListener::class],
                 [ServiceFactory::class],
                 [MigrationInstaller::class],
                 [MigrateCommand::class]
@@ -114,7 +114,9 @@ class CcaContaoPolyfill48ExtensionTest extends TestCase
 
         // migration services.
         $this->assertTrue($container->has(MigrationCollectionPolyFill::class));
-        $this->assertTrue($container->has(RunMigrationsHook::class));
+        $this->assertTrue($container->has(MigrationController::class));
+        $this->assertTrue($container->has(MigrationApplicationListener::class));
+        $this->assertTrue($container->has(ServiceFactory::class));
         $this->assertTrue($container->has(MigrationInstaller::class));
         $this->assertTrue($container->has(MigrateCommand::class));
 
@@ -122,7 +124,9 @@ class CcaContaoPolyfill48ExtensionTest extends TestCase
 
         // migration services not public.
         $this->assertFalse($container->has(MigrationCollectionPolyFill::class));
-        $this->assertFalse($container->has(RunMigrationsHook::class));
+        $this->assertFalse($container->has(MigrationController::class));
+        $this->assertFalse($container->has(MigrationApplicationListener::class));
+        $this->assertFalse($container->has(ServiceFactory::class));
         $this->assertFalse($container->has(MigrationInstaller::class));
         $this->assertFalse($container->has(MigrateCommand::class));
     }

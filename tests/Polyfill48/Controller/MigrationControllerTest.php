@@ -17,36 +17,23 @@
  * @filesource
  */
 
-declare(strict_types=1);
+namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill48\Controller;
 
-namespace ContaoCommunityAlliance\Polyfills\Polyfill48\Hook;
+use PHPUnit\Framework\TestCase;
 
-use ContaoCommunityAlliance\Polyfills\Polyfill48\Controller\MigrationController;
-
-/**
- * The hook for run the migrations.
- */
-final class RunMigrationsHook
+class MigrationControllerTest extends TestCase
 {
-    /**
-     * @var MigrationController
-     */
-    private $controller;
-
-    public function __construct(MigrationController $controller)
+    protected function setUp()
     {
-        $this->controller = $controller;
+        parent::setUp();
+        self::markTestSkipped('The tests for the class ' . __CLASS__ . ' are all skipped.');
     }
 
     /**
-     * Invoke the hook.
-     *
-     * @return array
+     * Test.
      */
-    public function __invoke(array $sqlCommands): array
+    public function test__construct()
     {
-        $this->controller->__invoke();
-
-        return $sqlCommands;
+        // Do nothing.
     }
 }
