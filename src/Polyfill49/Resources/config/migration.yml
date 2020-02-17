@@ -50,4 +50,12 @@ services:
             - '@database_connection'
         tags:
             -   name: contao.migration
-                priority: 100
+                priority: 98
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Installation\InstallTool:
+        public: true
+        arguments:
+            - "@database_connection"
+            - "%kernel.project_dir%"
+            - "@logger"
+

@@ -23,8 +23,8 @@ use Contao\CoreBundle\Exception\ResponseException;
 use Contao\CoreBundle\Migration\MigrationCollection;
 use Contao\CoreBundle\Migration\MigrationResult;
 use Contao\Environment;
-use Contao\InstallationBundle\InstallTool;
 use Contao\Validator;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\Installation\InstallTool;
 use Doctrine\DBAL\DBALException;
 use Patchwork\Utf8;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
@@ -65,7 +65,7 @@ class MigrationController
             $this->container->get('contao.framework')->initialize();
         }
 
-        if (!$this->shouldAbstain() || !($installTool = $this->container->get('contao.install_tool'))) {
+        if (!$this->shouldAbstain() || !($installTool = $this->container->get(InstallTool::class))) {
             return null;
         }
 
@@ -109,7 +109,7 @@ class MigrationController
      */
     private function adjustDatabaseTables(): ?RedirectResponse
     {
-        $this->container->get('contao.install_tool')->handleRunOnce();
+        $this->container->get(InstallTool::class)->handleRunOnce();
 
         $installer = $this->container->get('contao.installer');
 
@@ -145,7 +145,7 @@ class MigrationController
      */
     private function importExampleWebsite(): ?RedirectResponse
     {
-        $installTool = $this->container->get('contao.install_tool');
+        $installTool = $this->container->get(InstallTool::class);
         $templates   = $installTool->getTemplates();
 
         $this->context['templates'] = $templates;
@@ -201,7 +201,7 @@ class MigrationController
      */
     private function createAdminUser(): ?RedirectResponse
     {
-        $installTool = $this->container->get('contao.install_tool');
+        $installTool = $this->container->get(InstallTool::class);
 
         if (!$installTool->hasTable('tl_user')) {
             $this->context['hide_admin'] = true;
@@ -491,7 +491,7 @@ class MigrationController
             return false;
         }
 
-        $installTool = $this->container->get('contao.install_tool');
+        $installTool = $this->container->get(InstallTool::class);
         return $installTool->hasConfigurationError($this->context);
     }
 
@@ -518,7 +518,7 @@ class MigrationController
      */
     private function canLoginInstallTool(): bool
     {
-        $installTool = $this->container->get('contao.install_tool');
+        $installTool = $this->container->get(InstallTool::class);
 
         return !$installTool->isLocked()
                && $installTool->canWriteFiles()
