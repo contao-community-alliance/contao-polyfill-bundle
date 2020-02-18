@@ -8,4 +8,5 @@
 -->
 <project name="contao-polyfill-bundle" default="build">
   <import file="vendor/phpcq/phpcq/phpcq.main.xml" />
+  <target name="phpspec" />
 </project>

@@ -1,0 +1,61 @@
+services:
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill: ~
+
+    Contao\CoreBundle\Migration\MigrationCollection:
+        alias: ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill
+        public: true
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Controller\MigrationController:
+        public: false
+        calls:
+            -   method: setContainer
+                arguments:
+                    - '@service_container'
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\EventListener\MigrationApplicationListener:
+        public: false
+        arguments:
+            - '@ContaoCommunityAlliance\Polyfills\Polyfill49\Controller\MigrationController'
+            - '@Contao\CoreBundle\Migration\MigrationCollection'
+        tags:
+            -   name: kernel.event_listener
+                event: contao_installation.initialize_application
+                method: __invoke
+                priority: -256
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Factory\ServiceFactory:
+        public: false
+        arguments:
+            - '@contao.framework'
+            - '@database_connection'
+            - '@contao.doctrine.schema_provider'
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationInstaller:
+        factory: [ '@ContaoCommunityAlliance\Polyfills\Polyfill49\Factory\ServiceFactory', 'createMigrationInstaller' ]
+        public: false
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Command\MigrateCommand:
+        public: false
+        arguments:
+            - '@Contao\CoreBundle\Migration\MigrationCollection'
+            - '@contao.resource_locator'
+            - '%kernel.project_dir%'
+            - '@contao.framework'
+            - '@ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationInstaller'
+        tags:
+            -   name: console.command
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\FixVersion447Update:
+        arguments:
+            - '@database_connection'
+        tags:
+            -   name: contao.migration
+                priority: 98
+
+    ContaoCommunityAlliance\Polyfills\Polyfill49\Installation\InstallTool:
+        public: true
+        arguments:
+            - "@database_connection"
+            - "%kernel.project_dir%"
+            - "@logger"
+

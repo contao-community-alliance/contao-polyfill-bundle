@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019 Contao Community Alliance.
+ * (c) 2019-2020 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2019 Contao Community Alliance.
+ * @copyright  2019-2020 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -29,6 +29,7 @@ use Contao\ManagerPlugin\Bundle\Parser\ParserInterface;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\CcaContaoPolyfill45Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill47\CcaContaoPolyfill47Bundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\CcaContaoPolyfill49Bundle;
 use PackageVersions\Versions;
 
 /**
@@ -49,9 +50,10 @@ class Plugin implements BundlePluginInterface
         }
 
         foreach ([
-            CcaContaoPolyfill45Bundle::class => '4.5',
-            CcaContaoPolyfill46Bundle::class => '4.6',
-            CcaContaoPolyfill47Bundle::class => '4.7',
+                     CcaContaoPolyfill45Bundle::class => '4.5',
+                     CcaContaoPolyfill46Bundle::class => '4.6',
+                     CcaContaoPolyfill47Bundle::class => '4.7',
+                     CcaContaoPolyfill49Bundle::class => '4.9',
         ] as $bundleClass => $untilVersion) {
             if (!$this->acceptVersion($coreVersion, $untilVersion)) {
                 continue;
@@ -87,6 +89,13 @@ class Plugin implements BundlePluginInterface
      */
     private function acceptVersion(string $coreVersion, string $untilVersion): bool
     {
+        // Version compares for the branch alias develop.
+        if (false !== \strpos($coreVersion, 'x-dev')) {
+            \preg_match('/(\d+\.)+\d+/', $coreVersion, $matches);
+
+            return version_compare($matches[0], $untilVersion, '<');
+        }
+
         return version_compare($coreVersion, $untilVersion, '<=');
     }
 }

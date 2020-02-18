@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019 Contao Community Alliance.
+ * (c) 2019-2020 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,7 @@
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2019 Contao Community Alliance.
+ * @copyright  2019-2020 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -29,6 +29,7 @@ use ContaoCommunityAlliance\Polyfills\ContaoManager\Plugin;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\CcaContaoPolyfill45Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill47\CcaContaoPolyfill47Bundle;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\CcaContaoPolyfill49Bundle;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,15 +49,19 @@ class PluginTest extends TestCase
                 CcaContaoPolyfill45Bundle::class,
                 CcaContaoPolyfill46Bundle::class,
                 CcaContaoPolyfill47Bundle::class,
+                CcaContaoPolyfill49Bundle::class
             ],
             '4.5.0' => [
                 CcaContaoPolyfill46Bundle::class,
                 CcaContaoPolyfill47Bundle::class,
+                CcaContaoPolyfill49Bundle::class
             ],
             '4.6.0' => [
                 CcaContaoPolyfill47Bundle::class,
+                CcaContaoPolyfill49Bundle::class
             ],
-            '4.7.0' => [
+            '4.8.0' => [
+                CcaContaoPolyfill49Bundle::class
             ],
             'dev-master@012345678' => [
             ],
