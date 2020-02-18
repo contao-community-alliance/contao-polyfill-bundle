@@ -40,7 +40,7 @@ final class CcaContaoPolyfill49Bundle extends Bundle
     {
         parent::boot();
 
-        if ($this->isMigrationEnable()) {
+        if ($this->isMigrationEnabled()) {
             \class_alias(MigrationCollectionPolyFill::class, \Contao\CoreBundle\Migration\MigrationCollection::class);
             \class_alias(MigrationInterfacePolyFill::class, \Contao\CoreBundle\Migration\MigrationInterface::class);
             \class_alias(MigrationResultPolyFill::class, \Contao\CoreBundle\Migration\MigrationResult::class);
@@ -62,7 +62,7 @@ final class CcaContaoPolyfill49Bundle extends Bundle
      *
      * @return bool
      */
-    private function isMigrationEnable(): bool
+    private function isMigrationEnabled(): bool
     {
         return $this->container->has(MigrationCollectionPolyFill::class);
     }

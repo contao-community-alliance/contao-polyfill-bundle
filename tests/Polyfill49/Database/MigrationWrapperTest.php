@@ -28,6 +28,7 @@ use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationResultPolyFi
 use ContaoCommunityAlliance\Polyfills\Test\Polyfill49\Fixtures\Updater;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
  * @covers \ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationWrapper
@@ -45,15 +46,16 @@ class MigrationWrapperTest extends TestCase
             \class_alias(MigrationInterfacePolyFill::class, \Contao\CoreBundle\Migration\MigrationInterface::class);
         }
         if (!\class_exists(\Contao\CoreBundle\Migration\MigrationResult::class)) {
-            \class_alias(MigrationCollectionPolyFill::class, \Contao\CoreBundle\Migration\MigrationResult::class);
+            \class_alias(MigrationResultPolyFill::class, \Contao\CoreBundle\Migration\MigrationResult::class);
         }
     }
 
     public function testGetName(): void
     {
+        $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($connection, Updater::class);
+        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
 
         self::assertSame(
             'ContaoCommunityAlliance\Polyfills\Test\Polyfill49\Fixtures\Updater',
@@ -63,9 +65,10 @@ class MigrationWrapperTest extends TestCase
 
     public function testNotShouldRun(): void
     {
+        $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($connection, Updater::class);
+        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
 
         $updater = $this->getMockBuilder(Updater::class)
             ->disableOriginalConstructor()
@@ -86,9 +89,10 @@ class MigrationWrapperTest extends TestCase
 
     public function testShouldRun(): void
     {
+        $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($connection, Updater::class);
+        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
 
         $updater = $this->getMockBuilder(Updater::class)
             ->disableOriginalConstructor()
@@ -109,9 +113,10 @@ class MigrationWrapperTest extends TestCase
 
     public function testRunNotSuccessful(): void
     {
+        $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($connection, Updater::class);
+        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
 
         $updater = $this->getMockBuilder(Updater::class)
             ->disableOriginalConstructor()
@@ -122,11 +127,11 @@ class MigrationWrapperTest extends TestCase
             ->method('run')
             ->willThrowException(new \Exception());
         $updater
-            ->expects(self::once())
+            ->expects(self::never())
             ->method('hasMessage')
             ->willReturn(false);
         $updater
-            ->expects(self::never())
+            ->expects(self::once())
             ->method('getMessage');
 
         $reflection         = new \ReflectionObject($wrapper);
@@ -141,9 +146,10 @@ class MigrationWrapperTest extends TestCase
 
     public function testRunSuccessful(): void
     {
+        $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($connection, Updater::class);
+        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
 
         $runUpdater = false;
         $updater    = $this->getMockBuilder(Updater::class)
@@ -159,11 +165,11 @@ class MigrationWrapperTest extends TestCase
                 }
             );
         $updater
-            ->expects(self::once())
+            ->expects(self::never())
             ->method('hasMessage')
             ->willReturn(false);
         $updater
-            ->expects(self::never())
+            ->expects(self::once())
             ->method('getMessage');
 
         $reflection         = new \ReflectionObject($wrapper);
@@ -179,9 +185,10 @@ class MigrationWrapperTest extends TestCase
 
     public function testRunSuccessfulAlternativeMessage(): void
     {
+        $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($connection, Updater::class);
+        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
 
         $runUpdater = false;
         $updater    = $this->getMockBuilder(Updater::class)
@@ -197,7 +204,7 @@ class MigrationWrapperTest extends TestCase
                 }
             );
         $updater
-            ->expects(self::once())
+            ->expects(self::never())
             ->method('hasMessage')
             ->willReturn(true);
         $updater

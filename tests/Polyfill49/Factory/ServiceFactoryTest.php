@@ -41,8 +41,13 @@ class ServiceFactoryTest extends TestCase
     {
         parent::setUpBeforeClass();
 
+        if (!\defined('TL_ROOT')) {
+            \define('TL_ROOT', \sys_get_temp_dir());
+        }
+
         self::aliasContaoClass('System');
         self::aliasContaoClass('Config');
+        self::aliasContaoClass('Controller');
     }
 
     public function testCreateMigrationInstaller(): void
@@ -55,10 +60,19 @@ class ServiceFactoryTest extends TestCase
             ->method('has')
             ->willReturn(false);
         $container
-            ->expects(self::exactly(3))
             ->method('getParameter')
-            ->withConsecutive(['kernel.project_dir'], ['kernel.project_dir'], ['kernel.cache_dir'])
-            ->willReturnOnConsecutiveCalls('foo', 'foo', __DIR__ . DIRECTORY_SEPARATOR . 'Fixtures/cache');
+            ->willReturnCallback(
+                function ($name) {
+                    if ('kernel.project_dir' === $name) {
+                        return 'foo';
+                    }
+                    if ('kernel.cache_dir' === $name) {
+                        return \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixtures/cache';
+                    }
+
+                    $this->fail('Unknown parameter ' . $name . ' requested.');
+                }
+            );
         $framework = $this
             ->getMockBuilder(ContaoFramework::class)
             ->disableOriginalConstructor()

@@ -23,6 +23,7 @@ namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill49\DependencyInjection\
 
 use ContaoCommunityAlliance\Polyfills\Polyfill49\DependencyInjection\Compiler\TaggedMigrationsPass;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill;
+use PackageVersions\Versions;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -34,21 +35,72 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class TaggedMigrationsPassTest extends TestCase
 {
+    private function getExpectedResult(): array
+    {
+        $coreVersion = Versions::getVersion('contao/core-bundle');
+        $migrations  = [];
+        switch (true) {
+            case \version_compare($coreVersion, '4.8', '>='):
+                $migrations[] = 'Contao\InstallationBundle\Database\Version480Update';
+                // No break.
+            case \version_compare($coreVersion, '4.7', '>='):
+                $migrations[] = 'Contao\InstallationBundle\Database\Version470Update';
+                // No break.
+            case \version_compare($coreVersion, '4.6', '>='):
+                $migrations[] = 'Contao\InstallationBundle\Database\Version460Update';
+                // No break.
+            case \version_compare($coreVersion, '4.5', '>='):
+                $migrations[] = 'Contao\InstallationBundle\Database\Version450Update';
+                // No break.
+        }
+
+        return \array_merge(
+            [
+                'Contao\InstallationBundle\Database\Version330Update',
+                'Contao\InstallationBundle\Database\Version350Update',
+                'Contao\InstallationBundle\Database\Version400Update',
+                'Contao\InstallationBundle\Database\Version410Update',
+                'Contao\InstallationBundle\Database\Version430Update',
+                'Contao\InstallationBundle\Database\Version440Update',
+                'Contao\InstallationBundle\Database\Version447Update'
+            ],
+            \array_reverse($migrations),
+            [
+                'Test\Migration1PrioPositive1',
+                'Test\Migration1PrioPositive2',
+                'Test\Migration1PrioPositive12',
+                'Test\Migration1',
+                'Test\Migration2',
+                'Test\Migration12',
+                'Test\MigrationPrioNegative1',
+                'Test\MigrationPrioNegative2',
+                'Test\MigrationPrioNegative12'
+            ]
+        );
+    }
+
     public function testAddsTheMigrations(): void
     {
+        $coreVersion = Versions::getVersion('contao/core-bundle');
+        if ((0 === \strpos($coreVersion, 'dev-master')) || \version_compare($coreVersion, '4.9', '>=')) {
+            $this->markTestSkipped('Obsolete in Contao 4.9+');
+        }
         $container = new ContainerBuilder();
-        $container->setDefinition(MigrationCollectionPolyFill::class, new Definition(MigrationCollectionPolyFill::class));
+        $container->setDefinition(
+            MigrationCollectionPolyFill::class,
+            new Definition(MigrationCollectionPolyFill::class)
+        );
 
         $migrations = [
-            'Test\Migration1' => [],
-            'Test\Migration12' => [],
-            'Test\Migration2' => [],
-            'Test\MigrationPrioNegative1' => ['priority' => -1],
-            'Test\MigrationPrioNegative12' => ['priority' => -1],
-            'Test\MigrationPrioNegative2' => ['priority' => -1],
-            'Test\Migration1PrioPositive1' => ['priority' => 1],
+            'Test\Migration1'               => [],
+            'Test\Migration12'              => [],
+            'Test\Migration2'               => [],
+            'Test\MigrationPrioNegative1'   => ['priority' => -1],
+            'Test\MigrationPrioNegative12'  => ['priority' => -1],
+            'Test\MigrationPrioNegative2'   => ['priority' => -1],
+            'Test\Migration1PrioPositive1'  => ['priority' => 1],
             'Test\Migration1PrioPositive12' => ['priority' => 1],
-            'Test\Migration1PrioPositive2' => ['priority' => 1],
+            'Test\Migration1PrioPositive2'  => ['priority' => 1],
         ];
 
         foreach ($migrations as $migration => $attributes) {
@@ -63,30 +115,6 @@ class TaggedMigrationsPassTest extends TestCase
 
         $migrationServices = $container->getDefinition(MigrationCollectionPolyFill::class)->getArgument(0);
 
-        $this->assertSame(
-            [
-                'Contao\InstallationBundle\Database\Version330Update',
-                'Contao\InstallationBundle\Database\Version350Update',
-                'Contao\InstallationBundle\Database\Version400Update',
-                'Contao\InstallationBundle\Database\Version410Update',
-                'Contao\InstallationBundle\Database\Version430Update',
-                'Contao\InstallationBundle\Database\Version440Update',
-                'Contao\InstallationBundle\Database\Version447Update',
-                'Contao\InstallationBundle\Database\Version450Update',
-                'Contao\InstallationBundle\Database\Version460Update',
-                'Contao\InstallationBundle\Database\Version470Update',
-                'Contao\InstallationBundle\Database\Version480Update',
-                'Test\Migration1PrioPositive1',
-                'Test\Migration1PrioPositive2',
-                'Test\Migration1PrioPositive12',
-                'Test\Migration1',
-                'Test\Migration2',
-                'Test\Migration12',
-                'Test\MigrationPrioNegative1',
-                'Test\MigrationPrioNegative2',
-                'Test\MigrationPrioNegative12',
-            ],
-            array_keys($migrationServices)
-        );
+        $this->assertSame($this->getExpectedResult(), array_keys($migrationServices));
     }
 }
