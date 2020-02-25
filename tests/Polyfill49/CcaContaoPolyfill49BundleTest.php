@@ -61,6 +61,7 @@ class CcaContaoPolyfill49BundleTest extends TestCase
         self::assertTrue(\class_exists(\Contao\CoreBundle\Migration\MigrationCollection::class));
         self::assertTrue(\interface_exists(\Contao\CoreBundle\Migration\MigrationInterface::class));
         self::assertTrue(\class_exists(\Contao\CoreBundle\Migration\MigrationResult::class));
+        self::assertTrue(\class_exists(\Contao\CoreBundle\Migration\AbstractMigration::class));
     }
 
     public function testRegistersCompilerPass(): void

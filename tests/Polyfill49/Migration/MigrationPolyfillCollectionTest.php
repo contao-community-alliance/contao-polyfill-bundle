@@ -21,9 +21,12 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill49\Migration;
 
+use Contao\CoreBundle\Migration\MigrationCollection;
+use Contao\CoreBundle\Migration\MigrationResult;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationInterfacePolyFill;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationResultPolyFill;
-use ContaoCommunityAlliance\Polyfills\Test\Polyfill49\Fixtures\AbstractMigration;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\AbstractMigrationPolyfill;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,8 +35,26 @@ use PHPUnit\Framework\TestCase;
  * @covers \ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill
  * @covers \ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationResultPolyFill
  */
-class MigrationCollectionTest extends TestCase
+class MigrationPolyfillCollectionTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        parent::setUpBeforeClass();
+
+        if (!\class_exists(\Contao\CoreBundle\Migration\MigrationCollection::class)) {
+            \class_alias(MigrationCollectionPolyFill::class, \Contao\CoreBundle\Migration\MigrationCollection::class);
+        }
+        if (!\interface_exists(\Contao\CoreBundle\Migration\MigrationInterface::class)) {
+            \class_alias(MigrationInterfacePolyFill::class, \Contao\CoreBundle\Migration\MigrationInterface::class);
+        }
+        if (!\class_exists(\Contao\CoreBundle\Migration\MigrationResult::class)) {
+            \class_alias(MigrationResultPolyFill::class, \Contao\CoreBundle\Migration\MigrationResult::class);
+        }
+        if (!\class_exists(\Contao\CoreBundle\Migration\AbstractMigration::class)) {
+            \class_alias(AbstractMigrationPolyfill::class, \Contao\CoreBundle\Migration\AbstractMigration::class);
+        }
+    }
+
     /**
      * Test.
      *
@@ -41,7 +62,7 @@ class MigrationCollectionTest extends TestCase
      */
     public function testGetPendingNames(): void
     {
-        $migrations        = new MigrationCollectionPolyFill($this->getMigrationServices());
+        $migrations        = new MigrationCollection($this->getMigrationServices());
         $pendingMigrations = $migrations->getPendingNames();
 
         if (!\is_array($pendingMigrations)) {
@@ -58,7 +79,7 @@ class MigrationCollectionTest extends TestCase
      */
     public function testRunMigrations(): void
     {
-        $migrations = new MigrationCollectionPolyFill($this->getMigrationServices());
+        $migrations = new MigrationCollection($this->getMigrationServices());
         $results    = $migrations->run();
 
         if (!\is_array($results)) {
@@ -66,10 +87,10 @@ class MigrationCollectionTest extends TestCase
         }
 
         $this->assertCount(2, $results);
-        $this->assertInstanceOf(MigrationResultPolyFill::class, $results[0]);
+        $this->assertInstanceOf(MigrationResult::class, $results[0]);
         $this->assertTrue($results[0]->isSuccessful());
         $this->assertSame('successful', $results[0]->getMessage());
-        $this->assertInstanceOf(MigrationResultPolyFill::class, $results[1]);
+        $this->assertInstanceOf(MigrationResult::class, $results[1]);
         $this->assertFalse($results[1]->isSuccessful());
         $this->assertSame('failing', $results[1]->getMessage());
     }
@@ -77,7 +98,7 @@ class MigrationCollectionTest extends TestCase
     public function getMigrationServices(): array
     {
         return [
-            new class() extends AbstractMigration {
+            new class() extends AbstractMigrationPolyfill {
                 public function getName(): string
                 {
                     return 'Successful Migration';
@@ -88,12 +109,12 @@ class MigrationCollectionTest extends TestCase
                     return true;
                 }
 
-                public function run(): MigrationResultPolyFill
+                public function run(): MigrationResult
                 {
                     return $this->createResult(true, 'successful');
                 }
             },
-            new class() extends AbstractMigration {
+            new class() extends AbstractMigrationPolyfill {
                 public function getName(): string
                 {
                     return 'Failing Migration';
@@ -104,12 +125,12 @@ class MigrationCollectionTest extends TestCase
                     return true;
                 }
 
-                public function run(): MigrationResultPolyFill
+                public function run(): MigrationResult
                 {
                     return $this->createResult(false, 'failing');
                 }
             },
-            new class() extends AbstractMigration {
+            new class() extends AbstractMigrationPolyfill {
                 public function getName(): string
                 {
                     return 'Inactive Migration';
@@ -120,7 +141,7 @@ class MigrationCollectionTest extends TestCase
                     return false;
                 }
 
-                public function run(): MigrationResultPolyFill
+                public function run(): MigrationResult
                 {
                     throw new \LogicException('Should never be executed');
                 }

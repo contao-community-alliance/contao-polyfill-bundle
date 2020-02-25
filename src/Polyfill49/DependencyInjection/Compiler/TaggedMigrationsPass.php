@@ -24,7 +24,7 @@ namespace ContaoCommunityAlliance\Polyfills\Polyfill49\DependencyInjection\Compi
 
 use Contao\CoreBundle\Migration\MigrationCollection;
 use Contao\InstallationBundle\Database\AbstractVersionUpdate;
-use ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationWrapper;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationPolyfillWrapper;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -110,7 +110,7 @@ final class TaggedMigrationsPass implements CompilerPassInterface
 
             $definition = new Definition();
             $definition
-                ->setClass(MigrationWrapper::class)
+                ->setClass(MigrationPolyfillWrapper::class)
                 ->setPrivate(true)
                 ->setPublic(true)
                 ->setArguments(
