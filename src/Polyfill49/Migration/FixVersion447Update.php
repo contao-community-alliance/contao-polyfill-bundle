@@ -28,7 +28,7 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 /**
  * This fix the version update.
  */
-class FixVersion447Update extends AbstractMigration
+class FixVersion447Update extends AbstractMigrationPolyfill
 {
     /**
      * The connection.

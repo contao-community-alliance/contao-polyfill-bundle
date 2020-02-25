@@ -27,7 +27,7 @@ use Contao\CoreBundle\Migration\MigrationResult;
 /**
  * The abstract migration.
  */
-abstract class AbstractMigration implements MigrationInterface
+abstract class AbstractMigrationPolyfill implements MigrationInterface
 {
     /**
      * Create the migration result.

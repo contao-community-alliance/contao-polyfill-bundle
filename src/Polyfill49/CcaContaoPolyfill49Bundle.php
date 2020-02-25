@@ -22,6 +22,7 @@ declare(strict_types=1);
 namespace ContaoCommunityAlliance\Polyfills\Polyfill49;
 
 use ContaoCommunityAlliance\Polyfills\Polyfill49\DependencyInjection\Compiler\TaggedMigrationsPass;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\AbstractMigrationPolyfill;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationInterfacePolyFill;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationResultPolyFill;
@@ -44,6 +45,7 @@ final class CcaContaoPolyfill49Bundle extends Bundle
             \class_alias(MigrationCollectionPolyFill::class, \Contao\CoreBundle\Migration\MigrationCollection::class);
             \class_alias(MigrationInterfacePolyFill::class, \Contao\CoreBundle\Migration\MigrationInterface::class);
             \class_alias(MigrationResultPolyFill::class, \Contao\CoreBundle\Migration\MigrationResult::class);
+            \class_alias(AbstractMigrationPolyfill::class, \Contao\CoreBundle\Migration\AbstractMigration::class);
         }
     }
 

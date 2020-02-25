@@ -21,7 +21,7 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill49\Database;
 
-use ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationWrapper;
+use ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationPolyfillWrapper;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationInterfacePolyFill;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationResultPolyFill;
@@ -31,7 +31,7 @@ use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /**
- * @covers \ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationWrapper
+ * @covers \ContaoCommunityAlliance\Polyfills\Polyfill49\Database\MigrationPolyfillWrapper
  */
 class MigrationWrapperTest extends TestCase
 {
@@ -55,7 +55,7 @@ class MigrationWrapperTest extends TestCase
         $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
+        $wrapper = new MigrationPolyfillWrapper($container, $connection, Updater::class);
 
         self::assertSame(
             'ContaoCommunityAlliance\Polyfills\Test\Polyfill49\Fixtures\Updater',
@@ -68,7 +68,7 @@ class MigrationWrapperTest extends TestCase
         $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
+        $wrapper = new MigrationPolyfillWrapper($container, $connection, Updater::class);
 
         $updater = $this->getMockBuilder(Updater::class)
             ->disableOriginalConstructor()
@@ -92,7 +92,7 @@ class MigrationWrapperTest extends TestCase
         $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
+        $wrapper = new MigrationPolyfillWrapper($container, $connection, Updater::class);
 
         $updater = $this->getMockBuilder(Updater::class)
             ->disableOriginalConstructor()
@@ -116,7 +116,7 @@ class MigrationWrapperTest extends TestCase
         $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
+        $wrapper = new MigrationPolyfillWrapper($container, $connection, Updater::class);
 
         $updater = $this->getMockBuilder(Updater::class)
             ->disableOriginalConstructor()
@@ -149,7 +149,7 @@ class MigrationWrapperTest extends TestCase
         $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
+        $wrapper = new MigrationPolyfillWrapper($container, $connection, Updater::class);
 
         $runUpdater = false;
         $updater    = $this->getMockBuilder(Updater::class)
@@ -188,7 +188,7 @@ class MigrationWrapperTest extends TestCase
         $container  = $this->createMock(ContainerInterface::class);
         $connection = $this->createMock(Connection::class);
 
-        $wrapper = new MigrationWrapper($container, $connection, Updater::class);
+        $wrapper = new MigrationPolyfillWrapper($container, $connection, Updater::class);
 
         $runUpdater = false;
         $updater    = $this->getMockBuilder(Updater::class)
