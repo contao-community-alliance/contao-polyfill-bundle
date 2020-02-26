@@ -18,7 +18,7 @@
  * @filesource
  */
 
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill45;
 
@@ -28,6 +28,7 @@ use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\Ad
 use ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler\RegisterHookListenersPass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\Compiler\PassConfig;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Test.
@@ -44,6 +45,39 @@ class CcaContaoPolyfill45BundleTest extends TestCase
     public function testInstantiation(): void
     {
         $this->assertInstanceOf(CcaContaoPolyfill45Bundle::class, new CcaContaoPolyfill45Bundle());
+    }
+
+    public function testBootKernelInTwoTimes(): void
+    {
+        $bundle = new CcaContaoPolyfill45Bundle();
+
+        $kernel = $this->getMockForAbstractClass(
+            Kernel::class,
+            [],
+            'AppKernel',
+            false,
+            true,
+            true,
+            ['getBundles', 'initializeBundles', 'initializeContainer']
+        );
+        $kernel
+            ->expects(self::exactly(3))
+            ->method('getBundles')
+            ->willReturnCallback(
+                function () use ($bundle) {
+                    return [$bundle];
+                }
+            );
+        $kernel
+            ->expects(self::exactly(2))
+            ->method('initializeBundles');
+        $kernel
+            ->expects(self::exactly(2))
+            ->method('initializeContainer');
+
+        $kernel->boot();
+        $kernel->shutdown();
+        $kernel->boot();
     }
 
     public function testRegistersCompilerPass(): void
