@@ -42,10 +42,22 @@ final class CcaContaoPolyfill49Bundle extends Bundle
         parent::boot();
 
         if ($this->isMigrationEnabled()) {
-            \class_alias(MigrationCollectionPolyFill::class, \Contao\CoreBundle\Migration\MigrationCollection::class);
-            \class_alias(MigrationInterfacePolyFill::class, \Contao\CoreBundle\Migration\MigrationInterface::class);
-            \class_alias(MigrationResultPolyFill::class, \Contao\CoreBundle\Migration\MigrationResult::class);
-            \class_alias(AbstractMigrationPolyfill::class, \Contao\CoreBundle\Migration\AbstractMigration::class);
+            $this->classAlias(
+                MigrationCollectionPolyFill::class,
+                \Contao\CoreBundle\Migration\MigrationCollection::class
+            );
+            $this->classAlias(
+                MigrationInterfacePolyFill::class,
+                \Contao\CoreBundle\Migration\MigrationInterface::class
+            );
+            $this->classAlias(
+                MigrationResultPolyFill::class,
+                \Contao\CoreBundle\Migration\MigrationResult::class
+            );
+            $this->classAlias(
+                AbstractMigrationPolyfill::class,
+                \Contao\CoreBundle\Migration\AbstractMigration::class
+            );
         }
     }
 
@@ -67,5 +79,22 @@ final class CcaContaoPolyfill49Bundle extends Bundle
     private function isMigrationEnabled(): bool
     {
         return $this->container->has(MigrationCollectionPolyFill::class);
+    }
+
+    /**
+     * Create a class alias, if the alias not exsist.
+     *
+     * @param string $original The original class name.
+     * @param string $alias    The alias class name.
+     *
+     * @return void
+     */
+    private function classAlias(string $original, string $alias): void
+    {
+        if (\class_exists($alias) || \interface_exists($alias)) {
+            return;
+        }
+
+        \class_alias($original, $alias);
     }
 }

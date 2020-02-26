@@ -25,6 +25,7 @@ use ContaoCommunityAlliance\Polyfills\Polyfill49\CcaContaoPolyfill49Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\DependencyInjection\Compiler\TaggedMigrationsPass;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\HttpKernel\Kernel;
 
 /**
  * Test.
@@ -41,6 +42,57 @@ class CcaContaoPolyfill49BundleTest extends TestCase
     public function testInstantiation(): void
     {
         $this->assertInstanceOf(CcaContaoPolyfill49Bundle::class, new CcaContaoPolyfill49Bundle());
+    }
+
+    public function testBootKernelInTwoTimes(): void
+    {
+        $bundle = new CcaContaoPolyfill49Bundle();
+
+        $container = $this
+            ->getMockBuilder(ContainerBuilder::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['has'])
+            ->getMock();
+        $container
+            ->expects(self::exactly(2))
+            ->method('has')
+            ->willReturn(true);
+
+        $kernel = $this->getMockForAbstractClass(
+            Kernel::class,
+            [],
+            'AppKernel',
+            false,
+            true,
+            true,
+            ['getBundles', 'initializeBundles', 'initializeContainer']
+        );
+        $kernel
+            ->expects(self::exactly(3))
+            ->method('getBundles')
+            ->willReturnCallback(
+                function () use ($bundle) {
+                    return [$bundle];
+                }
+            );
+        $kernel
+            ->expects(self::exactly(2))
+            ->method('initializeBundles');
+        $kernel
+            ->expects(self::exactly(2))
+            ->method('initializeContainer');
+
+        $reflection1 = new \ReflectionProperty('AppKernel', 'container');
+        $reflection1->setAccessible(true);
+        $reflection1->setValue($kernel, $container);
+        $kernel->boot();
+
+        $kernel->shutdown();
+
+        $reflection2 = new \ReflectionProperty('AppKernel', 'container');
+        $reflection2->setAccessible(true);
+        $reflection2->setValue($kernel, $container);
+        $kernel->boot();
     }
 
     public function testMigrationEnabled(): void

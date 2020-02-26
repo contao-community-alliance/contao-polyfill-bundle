@@ -42,7 +42,9 @@ final class CcaContaoPolyfill45Bundle extends Bundle
     {
         parent::boot();
 
-        \class_alias(PackageUtil::class, ContaoPackageUtil::class);
+        if (!\class_exists(ContaoPackageUtil::class)) {
+            \class_alias(PackageUtil::class, ContaoPackageUtil::class);
+        }
     }
 
     /**
