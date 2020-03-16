@@ -17,6 +17,7 @@ services:
         arguments:
             - '@ContaoCommunityAlliance\Polyfills\Polyfill49\Controller\MigrationController'
             - '@Contao\CoreBundle\Migration\MigrationCollection'
+            - '@database_connection'
         tags:
             -   name: kernel.event_listener
                 event: contao_installation.initialize_application

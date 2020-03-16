@@ -27,7 +27,9 @@ use ContaoCommunityAlliance\Polyfills\Polyfill49\Controller\MigrationController;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\EventListener\MigrationApplicationListener;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationInterfacePolyFill;
-use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationResultPolyFill;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Driver\Mysqli\MysqliException;
+use Doctrine\DBAL\Exception\ConnectionException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -48,6 +50,58 @@ class MigrationApplicationListenerTest extends TestCase
         if (!\class_exists(\Contao\CoreBundle\Migration\MigrationResult::class)) {
             \class_alias(MigrationCollectionPolyFill::class, \Contao\CoreBundle\Migration\MigrationResult::class);
         }
+    }
+
+    /**
+     * @see https://github.com/contao-community-alliance/contao-polyfill-bundle/issues/5
+     */
+    public function testNoDatabaseConfigured(): void
+    {
+        $event = $this->createMock(InitializeApplicationEvent::class);
+
+        $controller = $this
+            ->getMockBuilder(MigrationController::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['__invoke'])
+            ->getMock();
+
+        $invokeController = false;
+        $controller
+            ->expects(self::never())
+            ->method('__invoke')
+            ->willReturnCallback(
+                function () use (&$invokeController) {
+                    $invokeController = true;
+                }
+            );
+
+        $notExecuteGetPendingNames = false;
+        $migrations                = $this
+            ->getMockBuilder(MigrationCollection::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getPendingNames'])
+            ->getMock();
+        $migrations
+            ->expects(self::never())
+            ->method('getPendingNames')
+            ->willReturnCallback(
+                function () use (&$notExecuteGetPendingNames) {
+                    $notExecuteGetPendingNames = true;
+                }
+            );
+
+        $connection = $this->createMock(Connection::class);
+        $connection
+            ->expects(self::once())
+            ->method('getDatabase')
+            ->willThrowException(
+                new ConnectionException('Database cannot connect.', new MysqliException('Database not configured.')));
+
+        $listener = new MigrationApplicationListener($controller, $migrations, $connection);
+        $listener->__invoke($event);
+
+        self::assertFalse($invokeController);
+        self::assertFalse($notExecuteGetPendingNames);
     }
 
     public function testHasNoPendingMigrations(): void
@@ -80,7 +134,13 @@ class MigrationApplicationListenerTest extends TestCase
             ->method('getPendingNames')
             ->willReturn(new \ArrayIterator());
 
-        $listener = new MigrationApplicationListener($controller, $migrations);
+        $connection = $this->createMock(Connection::class);
+        $connection
+            ->expects(self::once())
+            ->method('getDatabase')
+            ->willReturn('foo_database');
+
+        $listener = new MigrationApplicationListener($controller, $migrations, $connection);
         $listener->__invoke($event);
 
         self::assertFalse($invokeController);
@@ -116,7 +176,13 @@ class MigrationApplicationListenerTest extends TestCase
             ->method('getPendingNames')
             ->willReturn(new \ArrayIterator(['foo', 'bar']));
 
-        $listener = new MigrationApplicationListener($controller, $migrations);
+        $connection = $this->createMock(Connection::class);
+        $connection
+            ->expects(self::once())
+            ->method('getDatabase')
+            ->willReturn('foo_database');
+
+        $listener = new MigrationApplicationListener($controller, $migrations, $connection);
         $listener->__invoke($event);
 
         self::assertTrue($invokeController);
