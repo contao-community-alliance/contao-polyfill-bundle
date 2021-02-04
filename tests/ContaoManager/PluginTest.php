@@ -100,6 +100,7 @@ class PluginTest extends TestCase
             $this->assertSame($bundleClasses[$index], $bundle->getName());
             $this->assertSame([], $bundle->getReplace());
             $loadAfter = array_merge([ContaoCoreBundle::class], array_slice($bundleClasses, 0, $index));
+            sort($loadAfter);
             $this->assertSame($loadAfter, $bundle->getLoadAfter());
             $this->assertTrue($bundle->loadInDevelopment());
             $this->assertTrue($bundle->loadInProduction());
