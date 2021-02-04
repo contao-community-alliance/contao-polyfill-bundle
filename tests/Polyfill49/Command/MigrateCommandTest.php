@@ -56,7 +56,9 @@ final class MigrateCommandTest extends TestCase
         $display = $tester->getDisplay();
 
         self::assertSame(0, $code);
-        self::assertRegExp('/All migrations completed/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/All migrations completed/', $display)
+            : self::assertRegExp('/All migrations completed/', $display);
     }
 
     public function testExecutesPendingMigrations(): void
@@ -72,13 +74,25 @@ final class MigrateCommandTest extends TestCase
         $code    = $tester->execute([]);
         $display = $tester->getDisplay();
 
-        $this->assertSame(0, $code);
-        $this->assertRegExp('/Migration 1/', $display);
-        $this->assertRegExp('/Migration 2/', $display);
-        $this->assertRegExp('/Result 1/', $display);
-        $this->assertRegExp('/Result 2/', $display);
-        $this->assertRegExp('/Executed 2 migrations/', $display);
-        $this->assertRegExp('/All migrations completed/', $display);
+        self::assertSame(0, $code);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Migration 1/', $display)
+            : self::assertRegExp('/Migration 1/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Migration 2/', $display)
+            : self::assertRegExp('/Migration 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Result 2/', $display)
+            : self::assertRegExp('/Result 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Result 2/', $display)
+            : self::assertRegExp('/Result 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Executed 2 migrations/', $display)
+            : self::assertRegExp('/Executed 2 migrations/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/All migrations completed/', $display)
+            : self::assertRegExp('/All migrations completed/', $display);
     }
 
     /**
@@ -105,8 +119,12 @@ final class MigrateCommandTest extends TestCase
         unset($GLOBALS['test_' . self::class]);
 
         self::assertSame(0, $code);
-        self::assertRegExp('/runonceFile.php/', $display);
-        self::assertRegExp('/All migrations completed/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/runonceFile.php/', $display)
+            : self::assertRegExp('/runonceFile.php/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/All migrations completed/', $display)
+            : self::assertRegExp('/All migrations completed/', $display);
     }
 
     public function testExecutesSchemaDiff(): void
@@ -139,13 +157,27 @@ final class MigrateCommandTest extends TestCase
         $display = $tester->getDisplay();
 
         self::assertSame(0, $code);
-        self::assertRegExp('/First call QUERY 1/', $display);
-        self::assertRegExp('/First call QUERY 2/', $display);
-        self::assertRegExp('/Second call QUERY 1/', $display);
-        self::assertRegExp('/Second call QUERY 2/', $display);
-        self::assertRegExp('/Executed 2 SQL queries/', $display);
-        self::assertNotRegExp('/Executed 3 SQL queries/', $display);
-        self::assertRegExp('/All migrations completed/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/First call QUERY 1/', $display)
+            : self::assertRegExp('/First call QUERY 1/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/First call QUERY 2/', $display)
+            : self::assertRegExp('/First call QUERY 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Second call QUERY 1/', $display)
+            : self::assertRegExp('/Second call QUERY 1/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Second call QUERY 2/', $display)
+            : self::assertRegExp('/Second call QUERY 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Executed 2 SQL queries/', $display)
+            : self::assertRegExp('/Executed 2 SQL queries/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertDoesNotMatchRegularExpression('/Executed 3 SQL queries/', $display)
+            : self::assertNotRegExp('/Executed 3 SQL queries/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/All migrations completed/', $display)
+            : self::assertRegExp('/All migrations completed/', $display);
     }
 
     public function testAbortsIfAnswerIsNo(): void
@@ -162,11 +194,21 @@ final class MigrateCommandTest extends TestCase
         $display = $tester->getDisplay();
 
         self::assertSame(1, $code);
-        self::assertRegExp('/Migration 1/', $display);
-        self::assertRegExp('/Migration 2/', $display);
-        self::assertNotRegExp('/Result 1/', $display);
-        self::assertNotRegExp('/Result 2/', $display);
-        self::assertNotRegExp('/All migrations completed/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Migration 1/', $display)
+            : self::assertRegExp('/Migration 1/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Migration 2/', $display)
+            : self::assertRegExp('/Migration 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertDoesNotMatchRegularExpression('/Result 1/', $display)
+            : self::assertNotRegExp('/Result 1/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertDoesNotMatchRegularExpression('/Result 2/', $display)
+            : self::assertNotRegExp('/Result 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertDoesNotMatchRegularExpression('/All migrations completed/', $display)
+            : self::assertNotRegExp('/All migrations completed/', $display);
     }
 
     public function testDoesNotAbortIfMigrationFails(): void
@@ -183,12 +225,25 @@ final class MigrateCommandTest extends TestCase
         $display = $tester->getDisplay();
 
         self::assertSame(0, $code);
-        self::assertRegExp('/Migration 1/', $display);
-        self::assertRegExp('/Migration 2/', $display);
-        self::assertRegExp('/Result 1/', $display);
-        self::assertRegExp('/Migration failed/', $display);
-        self::assertRegExp('/Result 2/', $display);
-        self::assertRegExp('/All migrations completed/', $display);
+
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Migration 1/', $display)
+            : self::assertRegExp('/Migration 1/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Migration 2/', $display)
+            : self::assertRegExp('/Migration 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Result 1/', $display)
+            : self::assertRegExp('/Result 1/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Migration failed/', $display)
+            : self::assertRegExp('/Migration failed/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/Result 2/', $display)
+            : self::assertRegExp('/Result 2/', $display);
+        \method_exists($this, 'assertMatchesRegularExpression')
+            ? self::assertMatchesRegularExpression('/All migrations completed/', $display)
+            : self::assertRegExp('/All migrations completed/', $display);
     }
 
     /**
