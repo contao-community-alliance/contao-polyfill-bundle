@@ -97,6 +97,7 @@ class MigrationInstaller extends Installer
      * @SuppressWarnings(PHPMD.Superglobals)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ShortVariable)
      */
     // @codingStandardsIgnoreStart
     public function compileCommands(): array
