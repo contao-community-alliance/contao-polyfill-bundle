@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler;
 
+use Composer\InstalledVersions;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\Util\PackageUtil;
 use PackageVersions\Versions;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -108,7 +109,7 @@ class AddAssetsPackagesPass implements CompilerPassInterface
         $packages = $container->getDefinition('assets.packages');
         $context  = new Reference('contao.assets.plugins_context');
 
-        foreach (Versions::VERSIONS as $name => $version) {
+        foreach ($this->packageVersions() as $name => $version) {
             if (0 !== \strncmp('contao-components/', $name, 18)) {
                 continue;
             }
@@ -177,5 +178,29 @@ class AddAssetsPackagesPass implements CompilerPassInterface
         }
 
         return Container::underscore($className);
+    }
+
+    /**
+     * Get the package versions.
+     *
+     * @return array
+     */
+    private function packageVersions(): array
+    {
+        if (false === \class_exists(InstalledVersions::class)) {
+            return Versions::VERSIONS;
+        }
+
+        $versions = [];
+        $packages = InstalledVersions::getInstalledPackages();
+        foreach ($packages as $packageName) {
+            $versions[$packageName] = \sprintf(
+                '%s@%s',
+                InstalledVersions::getVersionRanges($packageName),
+                InstalledVersions::getReference($packageName)
+            );
+        }
+
+        return $versions;
     }
 }
