@@ -375,7 +375,7 @@ class RegisterHookListenersPassTest extends TestCase
 
         $definition = $container->getDefinition(HookListenerRegistrar::class);
         $argument   = $definition->getArgument(0);
-        $this->assertInternalType('array', $argument);
+        $this->assertIsArray($argument);
 
         return $argument;
     }
