@@ -23,72 +23,11 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill45\Util;
 
-use PackageVersions\Versions;
+use ContaoCommunityAlliance\Polyfills\Util\PackageUtil as MainPackageUtil;
 
 /**
  * The package util.
  */
-class PackageUtil
+class PackageUtil extends MainPackageUtil
 {
-    /**
-     * Returns the version number of a package.
-     *
-     * @param string $packageName The package name.
-     *
-     * @return string
-     */
-    public static function getVersion(string $packageName): string
-    {
-        $version = Versions::getVersion($packageName);
-
-        return static::parseVersion($version);
-    }
-
-    /**
-     * Returns the version number as "major.minor.patch".
-     *
-     * @param string $packageName The package name.
-     *
-     * @return string
-     */
-    public static function getNormalizedVersion(string $packageName): string
-    {
-        $chunks  = \explode('.', static::getVersion($packageName));
-        $chunks += [0, 0, 0];
-
-        if (\count($chunks) > 3) {
-            $chunks = \array_slice($chunks, 0, 3);
-        }
-
-        return \implode('.', $chunks);
-    }
-
-    /**
-     * Parses a version number.
-     *
-     * The method either returns a version number such as 1.0.0 (a leading "v"
-     * will be stripped) or a branch name such as dev-master.
-     *
-     * @param string $version The version.
-     *
-     * @return string
-     */
-    public static function parseVersion(string $version): string
-    {
-        return \ltrim(\strstr($version, '@', true), 'v');
-    }
-
-    /**
-     * Returns the contao/core-bundle or contao/contao version.
-     *
-     * @return string
-     */
-    public static function getContaoVersion(): string
-    {
-        try {
-            return static::getVersion('contao/core-bundle');
-        } catch (\OutOfBoundsException $e) {
-            return static::getVersion('contao/contao');
-        }
-    }
 }

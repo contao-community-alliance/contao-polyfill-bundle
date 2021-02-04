@@ -30,7 +30,7 @@ use ContaoCommunityAlliance\Polyfills\Polyfill45\CcaContaoPolyfill45Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill47\CcaContaoPolyfill47Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\CcaContaoPolyfill49Bundle;
-use PackageVersions\Versions;
+use ContaoCommunityAlliance\Polyfills\Util\PackageUtil;
 
 /**
  * Plugin for the Contao Manager.
@@ -76,7 +76,7 @@ class Plugin implements BundlePluginInterface
      */
     protected function getContaoCoreVersion(): string
     {
-        return Versions::getVersion('contao/core-bundle');
+        return PackageUtil::getVersion('contao/core-bundle');
     }
 
     /**

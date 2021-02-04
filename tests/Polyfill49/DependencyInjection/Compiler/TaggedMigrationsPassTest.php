@@ -23,7 +23,7 @@ namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill49\DependencyInjection\
 
 use ContaoCommunityAlliance\Polyfills\Polyfill49\DependencyInjection\Compiler\TaggedMigrationsPass;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill;
-use PackageVersions\Versions;
+use ContaoCommunityAlliance\Polyfills\Util\PackageUtil;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -37,7 +37,7 @@ class TaggedMigrationsPassTest extends TestCase
 {
     private function getExpectedResult(): array
     {
-        $coreVersion = Versions::getVersion('contao/core-bundle');
+        $coreVersion = PackageUtil::getVersion('contao/core-bundle');
         $migrations  = [];
         switch (true) {
             case \version_compare($coreVersion, '4.8', '>='):
@@ -81,7 +81,7 @@ class TaggedMigrationsPassTest extends TestCase
 
     public function testAddsTheMigrations(): void
     {
-        $coreVersion = Versions::getVersion('contao/core-bundle');
+        $coreVersion = PackageUtil::getVersion('contao/core-bundle');
         if ((0 === \strpos($coreVersion, 'dev-master')) || \version_compare($coreVersion, '4.9', '>=')) {
             self::markTestSkipped('Obsolete in Contao 4.9+');
         }
