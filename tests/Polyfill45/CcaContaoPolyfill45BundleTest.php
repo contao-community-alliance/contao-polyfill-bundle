@@ -44,7 +44,7 @@ class CcaContaoPolyfill45BundleTest extends TestCase
      */
     public function testInstantiation(): void
     {
-        $this->assertInstanceOf(CcaContaoPolyfill45Bundle::class, new CcaContaoPolyfill45Bundle());
+        self::assertInstanceOf(CcaContaoPolyfill45Bundle::class, new CcaContaoPolyfill45Bundle());
     }
 
     public function testBootKernelInTwoTimes(): void
@@ -86,11 +86,11 @@ class CcaContaoPolyfill45BundleTest extends TestCase
 
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
         $container
-            ->expects($this->exactly(2))
+            ->expects(self::exactly(2))
             ->method('addCompilerPass')
             ->withConsecutive(
-                [$this->isInstanceOf(RegisterHookListenersPass::class), PassConfig::TYPE_OPTIMIZE],
-                [$this->isInstanceOf(AddAssetsPackagesPass::class)]
+                [self::isInstanceOf(RegisterHookListenersPass::class), PassConfig::TYPE_OPTIMIZE],
+                [self::isInstanceOf(AddAssetsPackagesPass::class)]
             )
             ->willReturn($container);
 

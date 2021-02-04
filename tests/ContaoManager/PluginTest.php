@@ -90,20 +90,20 @@ class PluginTest extends TestCase
             ->getMockBuilder(Plugin::class)
             ->setMethods(['getContaoCoreVersion'])
             ->getMock();
-        $plugin->expects($this->once())->method('getContaoCoreVersion')->willReturn($coreVersion);
+        $plugin->expects(self::once())->method('getContaoCoreVersion')->willReturn($coreVersion);
         /** @var Plugin $plugin */
         $bundles = $plugin->getBundles($parser);
 
-        $this->assertCount(count($bundleClasses), $bundles);
+        self::assertCount(count($bundleClasses), $bundles);
         foreach ($bundles as $index => $bundle) {
-            $this->assertInstanceOf(ConfigInterface::class, $bundle);
-            $this->assertSame($bundleClasses[$index], $bundle->getName());
-            $this->assertSame([], $bundle->getReplace());
+            self::assertInstanceOf(ConfigInterface::class, $bundle);
+            self::assertSame($bundleClasses[$index], $bundle->getName());
+            self::assertSame([], $bundle->getReplace());
             $loadAfter = array_merge([ContaoCoreBundle::class], array_slice($bundleClasses, 0, $index));
             sort($loadAfter);
-            $this->assertSame($loadAfter, $bundle->getLoadAfter());
-            $this->assertTrue($bundle->loadInDevelopment());
-            $this->assertTrue($bundle->loadInProduction());
+            self::assertSame($loadAfter, $bundle->getLoadAfter());
+            self::assertTrue($bundle->loadInDevelopment());
+            self::assertTrue($bundle->loadInProduction());
         }
     }
 }

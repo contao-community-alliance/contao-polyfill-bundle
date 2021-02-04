@@ -83,7 +83,7 @@ class TaggedMigrationsPassTest extends TestCase
     {
         $coreVersion = Versions::getVersion('contao/core-bundle');
         if ((0 === \strpos($coreVersion, 'dev-master')) || \version_compare($coreVersion, '4.9', '>=')) {
-            $this->markTestSkipped('Obsolete in Contao 4.9+');
+            self::markTestSkipped('Obsolete in Contao 4.9+');
         }
         $container = new ContainerBuilder();
         $container->setDefinition(
@@ -115,6 +115,6 @@ class TaggedMigrationsPassTest extends TestCase
 
         $migrationServices = $container->getDefinition(MigrationCollectionPolyFill::class)->getArgument(0);
 
-        $this->assertSame($this->getExpectedResult(), array_keys($migrationServices));
+        self::assertSame($this->getExpectedResult(), array_keys($migrationServices));
     }
 }

@@ -42,7 +42,7 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
      */
     public function testInstantiation(): void
     {
-        $this->assertInstanceOf(CcaContaoPolyfill45Extension::class, new CcaContaoPolyfill45Extension());
+        self::assertInstanceOf(CcaContaoPolyfill45Extension::class, new CcaContaoPolyfill45Extension());
     }
 
     /**
@@ -57,7 +57,7 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
             ->setMethods(['setDefinition'])
             ->getMock();
         $container
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('setDefinition')
             ->with(HookListenerRegistrar::class);
 
@@ -78,7 +78,7 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
             ->setMethods(['setDefinition'])
             ->getMock();
         $container
-            ->expects($this->exactly(3))
+            ->expects(self::exactly(3))
             ->method('setDefinition')
             ->withConsecutive(
                 ['cca.polyfill_45_event_listener.insert_tags_asset'],
@@ -103,7 +103,7 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
             ->setMethods(['setDefinition'])
             ->getMock();
         $container
-            ->expects($this->exactly(4))
+            ->expects(self::exactly(4))
             ->method('setDefinition')
             ->withConsecutive(
                 [HookListenerRegistrar::class],
@@ -128,7 +128,7 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
             ->getMockBuilder(ContainerBuilder::class)
             ->setMethods(['setDefinition'])
             ->getMock();
-        $container->expects($this->never())->method('setDefinition');
+        $container->expects(self::never())->method('setDefinition');
 
         $extension = new CcaContaoPolyfill45Extension();
 
@@ -152,11 +152,11 @@ class CcaContaoPolyfill45ExtensionTest extends TestCase
         $extension->load([['tagged_hooks' => true, 'asset' => true]], $container);
         $container->compile();
         // tagged_hooks services.
-        $this->assertTrue($container->has(HookListenerRegistrar::class));
+        self::assertTrue($container->has(HookListenerRegistrar::class));
 
         // asset services.
-        $this->assertTrue($container->has('cca.polyfill_45_event_listener.insert_tags_asset'));
-        $this->assertTrue($container->has('contao.assets.files_context'));
-        $this->assertTrue($container->has('contao.assets.plugins_context'));
+        self::assertTrue($container->has('cca.polyfill_45_event_listener.insert_tags_asset'));
+        self::assertTrue($container->has('contao.assets.files_context'));
+        self::assertTrue($container->has('contao.assets.plugins_context'));
     }
 }

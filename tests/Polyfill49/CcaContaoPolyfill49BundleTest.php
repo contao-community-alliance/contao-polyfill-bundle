@@ -41,7 +41,7 @@ class CcaContaoPolyfill49BundleTest extends TestCase
      */
     public function testInstantiation(): void
     {
-        $this->assertInstanceOf(CcaContaoPolyfill49Bundle::class, new CcaContaoPolyfill49Bundle());
+        self::assertInstanceOf(CcaContaoPolyfill49Bundle::class, new CcaContaoPolyfill49Bundle());
     }
 
     public function testBootKernelInTwoTimes(): void
@@ -122,10 +122,10 @@ class CcaContaoPolyfill49BundleTest extends TestCase
 
         $container = $this->getMockBuilder(ContainerBuilder::class)->disableOriginalConstructor()->getMock();
         $container
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('addCompilerPass')
             ->withConsecutive(
-                [$this->isInstanceOf(TaggedMigrationsPass::class)]
+                [self::isInstanceOf(TaggedMigrationsPass::class)]
             )
             ->willReturn($container);
 

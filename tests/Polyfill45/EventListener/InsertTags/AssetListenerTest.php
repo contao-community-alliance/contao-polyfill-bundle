@@ -34,7 +34,7 @@ class AssetListenerTest extends TestCase
     {
         $packages = $this->createMock(Packages::class);
         $packages
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getUrl')
             ->with('foo/bar', 'package')
             ->willReturn('/foo/bar')
@@ -42,14 +42,14 @@ class AssetListenerTest extends TestCase
 
         $listener = new AssetListener($packages);
 
-        $this->assertSame('foo/bar', $listener->onReplaceInsertTags('asset::foo/bar::package'));
+        self::assertSame('foo/bar', $listener->onReplaceInsertTags('asset::foo/bar::package'));
     }
 
     public function testReplacesInsertTagsWithoutPackageName(): void
     {
         $packages = $this->createMock(Packages::class);
         $packages
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getUrl')
             ->with('foo/bar', null)
             ->willReturn('/foo/bar')
@@ -57,19 +57,19 @@ class AssetListenerTest extends TestCase
 
         $listener = new AssetListener($packages);
 
-        $this->assertSame('foo/bar', $listener->onReplaceInsertTags('asset::foo/bar'));
+        self::assertSame('foo/bar', $listener->onReplaceInsertTags('asset::foo/bar'));
     }
 
     public function testIgnoresOtherInsertTags(): void
     {
         $packages = $this->createMock(Packages::class);
         $packages
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('getUrl')
         ;
 
         $listener = new AssetListener($packages);
 
-        $this->assertFalse($listener->onReplaceInsertTags('env::pageTitle'));
+        self::assertFalse($listener->onReplaceInsertTags('env::pageTitle'));
     }
 }

@@ -39,6 +39,6 @@ class CcaContaoPolyfill46BundleTest extends TestCase
      */
     public function testInstantiation(): void
     {
-        $this->assertInstanceOf(CcaContaoPolyfill46Bundle::class, new CcaContaoPolyfill46Bundle());
+        self::assertInstanceOf(CcaContaoPolyfill46Bundle::class, new CcaContaoPolyfill46Bundle());
     }
 }

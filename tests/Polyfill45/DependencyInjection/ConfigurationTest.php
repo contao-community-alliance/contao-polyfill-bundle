@@ -40,7 +40,7 @@ class ConfigurationTest extends TestCase
      */
     public function testInstantiation(): void
     {
-        $this->assertInstanceOf(Configuration::class, new Configuration());
+        self::assertInstanceOf(Configuration::class, new Configuration());
     }
 
     /**
@@ -127,6 +127,6 @@ class ConfigurationTest extends TestCase
         $configuration = new Configuration();
         $processor     = new Processor();
 
-        $this->assertSame($expected, $processor->processConfiguration($configuration, [$input]));
+        self::assertSame($expected, $processor->processConfiguration($configuration, [$input]));
     }
 }

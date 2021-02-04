@@ -55,8 +55,8 @@ final class MigrateCommandTest extends TestCase
         $code    = $tester->execute([]);
         $display = $tester->getDisplay();
 
-        $this->assertSame(0, $code);
-        $this->assertRegExp('/All migrations completed/', $display);
+        self::assertSame(0, $code);
+        self::assertRegExp('/All migrations completed/', $display);
     }
 
     public function testExecutesPendingMigrations(): void
@@ -100,24 +100,24 @@ final class MigrateCommandTest extends TestCase
         $code    = $tester->execute([]);
         $display = $tester->getDisplay();
 
-        $this->assertSame('executed', $GLOBALS['test_' . self::class]);
+        self::assertSame('executed', $GLOBALS['test_' . self::class]);
 
         unset($GLOBALS['test_' . self::class]);
 
-        $this->assertSame(0, $code);
-        $this->assertRegExp('/runonceFile.php/', $display);
-        $this->assertRegExp('/All migrations completed/', $display);
+        self::assertSame(0, $code);
+        self::assertRegExp('/runonceFile.php/', $display);
+        self::assertRegExp('/All migrations completed/', $display);
     }
 
     public function testExecutesSchemaDiff(): void
     {
         $installer = $this->createMock(MigrationInstaller::class);
         $installer
-            ->expects($this->atLeastOnce())
+            ->expects(self::atLeastOnce())
             ->method('compileCommands');
 
         $installer
-            ->expects($this->atLeastOnce())
+            ->expects(self::atLeastOnce())
             ->method('getCommands')
             ->willReturn(
                 [
@@ -138,14 +138,14 @@ final class MigrateCommandTest extends TestCase
         $code    = $tester->execute([]);
         $display = $tester->getDisplay();
 
-        $this->assertSame(0, $code);
-        $this->assertRegExp('/First call QUERY 1/', $display);
-        $this->assertRegExp('/First call QUERY 2/', $display);
-        $this->assertRegExp('/Second call QUERY 1/', $display);
-        $this->assertRegExp('/Second call QUERY 2/', $display);
-        $this->assertRegExp('/Executed 2 SQL queries/', $display);
-        $this->assertNotRegExp('/Executed 3 SQL queries/', $display);
-        $this->assertRegExp('/All migrations completed/', $display);
+        self::assertSame(0, $code);
+        self::assertRegExp('/First call QUERY 1/', $display);
+        self::assertRegExp('/First call QUERY 2/', $display);
+        self::assertRegExp('/Second call QUERY 1/', $display);
+        self::assertRegExp('/Second call QUERY 2/', $display);
+        self::assertRegExp('/Executed 2 SQL queries/', $display);
+        self::assertNotRegExp('/Executed 3 SQL queries/', $display);
+        self::assertRegExp('/All migrations completed/', $display);
     }
 
     public function testAbortsIfAnswerIsNo(): void
@@ -161,12 +161,12 @@ final class MigrateCommandTest extends TestCase
         $code    = $tester->execute([]);
         $display = $tester->getDisplay();
 
-        $this->assertSame(1, $code);
-        $this->assertRegExp('/Migration 1/', $display);
-        $this->assertRegExp('/Migration 2/', $display);
-        $this->assertNotRegExp('/Result 1/', $display);
-        $this->assertNotRegExp('/Result 2/', $display);
-        $this->assertNotRegExp('/All migrations completed/', $display);
+        self::assertSame(1, $code);
+        self::assertRegExp('/Migration 1/', $display);
+        self::assertRegExp('/Migration 2/', $display);
+        self::assertNotRegExp('/Result 1/', $display);
+        self::assertNotRegExp('/Result 2/', $display);
+        self::assertNotRegExp('/All migrations completed/', $display);
     }
 
     public function testDoesNotAbortIfMigrationFails(): void
@@ -182,13 +182,13 @@ final class MigrateCommandTest extends TestCase
         $code    = $tester->execute([]);
         $display = $tester->getDisplay();
 
-        $this->assertSame(0, $code);
-        $this->assertRegExp('/Migration 1/', $display);
-        $this->assertRegExp('/Migration 2/', $display);
-        $this->assertRegExp('/Result 1/', $display);
-        $this->assertRegExp('/Migration failed/', $display);
-        $this->assertRegExp('/Result 2/', $display);
-        $this->assertRegExp('/All migrations completed/', $display);
+        self::assertSame(0, $code);
+        self::assertRegExp('/Migration 1/', $display);
+        self::assertRegExp('/Migration 2/', $display);
+        self::assertRegExp('/Result 1/', $display);
+        self::assertRegExp('/Migration failed/', $display);
+        self::assertRegExp('/Result 2/', $display);
+        self::assertRegExp('/All migrations completed/', $display);
     }
 
     /**
