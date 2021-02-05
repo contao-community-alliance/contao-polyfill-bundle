@@ -47,10 +47,12 @@ final class Configuration implements ConfigurationInterface
             ->children()
                 ->booleanNode('tagged_hooks')
                     ->info('Register HOOKs as tagged services.')
+                    ->setDeprecated('The child node "%node%" at path "%path%" is deprecated.')
                     ->defaultTrue()
                 ->end()
                 ->booleanNode('asset')
                     ->info('Use the Contao asset.')
+                    ->setDeprecated('The child node "%node%" at path "%path%" is deprecated.')
                     ->defaultTrue()
                 ->end()
             ->end();

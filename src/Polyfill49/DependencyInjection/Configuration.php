@@ -46,6 +46,7 @@ final class Configuration implements ConfigurationInterface
             ->children()
                 ->booleanNode('migration')
                     ->info('Use the Contao migration service.')
+                    ->setDeprecated('The child node "%node%" at path "%path%" is deprecated.')
                     ->defaultTrue()
                 ->end()
             ->end();
