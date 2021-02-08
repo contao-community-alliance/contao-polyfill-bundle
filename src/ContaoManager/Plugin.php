@@ -76,7 +76,11 @@ class Plugin implements BundlePluginInterface
      */
     protected function getContaoCoreVersion(): string
     {
-        return Versions::getVersion('contao/core-bundle');
+        try {
+            return Versions::getVersion('contao/core-bundle');
+        } catch (\OutOfBoundsException $e) {
+            return Versions::getVersion('contao/contao');
+        }
     }
 
     /**
