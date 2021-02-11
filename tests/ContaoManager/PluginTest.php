@@ -13,6 +13,7 @@
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -64,6 +65,10 @@ class PluginTest extends TestCase
                 CcaContaoPolyfill49Bundle::class
             ],
             'dev-master@012345678' => [
+            ],
+            '4.x@012345678' => [
+            ],
+            'dev-other-branch' => [
             ],
         ] as $version => $bundleClasses) {
             yield [
