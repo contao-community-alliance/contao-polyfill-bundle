@@ -13,6 +13,7 @@
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
  * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
@@ -45,7 +46,7 @@ class Plugin implements BundlePluginInterface
         $bundles     = [];
         $coreVersion = $this->getContaoCoreVersion();
         $loadAfter   = [ContaoCoreBundle::class];
-        if (0 === strncmp($coreVersion, 'dev-master', 10)) {
+        if (!\preg_match('/^(\d+\.)+\d+$/', $coreVersion)) {
             return [];
         }
 
@@ -76,7 +77,7 @@ class Plugin implements BundlePluginInterface
      */
     protected function getContaoCoreVersion(): string
     {
-        return PackageUtil::getVersion('contao/core-bundle');
+        return PackageUtil::getVersion('contao/core-bundle') ?: PackageUtil::getVersion('contao/contao');
     }
 
     /**
