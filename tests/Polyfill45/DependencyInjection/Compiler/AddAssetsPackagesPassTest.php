@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019-2020 Contao Community Alliance.
+ * (c) 2019-2021 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Andreas Schempp <andreas.schempp@terminal42.ch>
  * @author     Leo Feyer <github@contao.org>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2019-2020 Contao Community Alliance.
+ * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -58,14 +58,14 @@ class AddAssetsPackagesPassTest extends TestCase
     {
         $container = $this->createMock(ContainerBuilder::class);
         $container
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('hasDefinition')
             ->with('cca.polyfill_45_event_listener.insert_tags_asset')
             ->willReturn(false)
         ;
 
         $container
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('getDefinition')
         ;
 
@@ -91,7 +91,7 @@ class AddAssetsPackagesPassTest extends TestCase
             }
         }
 
-        $this->assertFalse($found);
+        self::assertFalse($found);
     }
 
     public function testUsesTheBundleNameAsPackageName(): void
@@ -112,13 +112,13 @@ class AddAssetsPackagesPassTest extends TestCase
             }
         }
 
-        $this->assertTrue($found);
-        $this->assertTrue($container->hasDefinition('assets._package_foo_bar'));
+        self::assertTrue($found);
+        self::assertTrue($container->hasDefinition('assets._package_foo_bar'));
 
         $service = $container->getDefinition('assets._package_foo_bar');
-        $this->assertSame('bundles/foobar', $service->getArgument(0));
-        $this->assertSame('assets.empty_version_strategy', (string) $service->getArgument(1));
-        $this->assertSame('contao.assets.plugins_context', (string) $service->getArgument(2));
+        self::assertSame('bundles/foobar', $service->getArgument(0));
+        self::assertSame('assets.empty_version_strategy', (string) $service->getArgument(1));
+        self::assertSame('contao.assets.plugins_context', (string) $service->getArgument(2));
     }
 
     public function testUsesTheDefaultVersionStrategyForBundles(): void
@@ -131,11 +131,11 @@ class AddAssetsPackagesPassTest extends TestCase
         $pass = new AddAssetsPackagesPass();
         $pass->process($container);
 
-        $this->assertTrue($container->hasDefinition('assets._package_foo_bar'));
+        self::assertTrue($container->hasDefinition('assets._package_foo_bar'));
 
         $service = $container->getDefinition('assets._package_foo_bar');
 
-        $this->assertSame('assets._version_default', (string) $service->getArgument(1));
+        self::assertSame('assets._version_default', (string) $service->getArgument(1));
     }
 
     public function testSupportsBundlesWithWrongSuffix(): void
@@ -146,11 +146,11 @@ class AddAssetsPackagesPassTest extends TestCase
         $pass = new AddAssetsPackagesPass();
         $pass->process($container);
 
-        $this->assertTrue($container->hasDefinition('assets._package_foo_bar_package'));
+        self::assertTrue($container->hasDefinition('assets._package_foo_bar_package'));
 
         $service = $container->getDefinition('assets._package_foo_bar_package');
 
-        $this->assertSame('bundles/foobarpackage', $service->getArgument(0));
+        self::assertSame('bundles/foobarpackage', $service->getArgument(0));
     }
 
     public function testRegistersTheContaoComponents(): void
@@ -163,19 +163,19 @@ class AddAssetsPackagesPassTest extends TestCase
         $pass = new AddAssetsPackagesPass();
         $pass->process($container);
 
-        $this->assertTrue($container->hasDefinition('assets._package_contao-components/contao'));
-        $this->assertTrue($container->hasDefinition('assets._version_contao-components/contao'));
-        $this->assertFalse($container->hasDefinition('assets._package_contao/image'));
-        $this->assertFalse($container->hasDefinition('assets._version_contao/image'));
+        self::assertTrue($container->hasDefinition('assets._package_contao-components/contao'));
+        self::assertTrue($container->hasDefinition('assets._version_contao-components/contao'));
+        self::assertFalse($container->hasDefinition('assets._package_contao/image'));
+        self::assertFalse($container->hasDefinition('assets._version_contao/image'));
 
         $service = $container->getDefinition('assets._package_contao-components/contao');
 
-        $this->assertSame('assets._version_contao-components/contao', (string) $service->getArgument(1));
+        self::assertSame('assets._version_contao-components/contao', (string) $service->getArgument(1));
 
         $expectedVersion = PackageUtil::getVersion('contao-components/contao');
         $actualVersion = $container->getDefinition('assets._version_contao-components/contao')->getArgument(0);
 
-        $this->assertSame($expectedVersion, $actualVersion);
+        self::assertSame($expectedVersion, $actualVersion);
     }
 
     private function getContainerWithAssets(string $name, string $class, string $path): ContainerBuilder

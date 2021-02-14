@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019-2020 Contao Community Alliance.
+ * (c) 2019-2021 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Andreas Schempp <andreas.schempp@terminal42.ch>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2019-2020 Contao Community Alliance.
+ * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -62,7 +62,7 @@ class RegisterHookListenersPassTest extends TestCase
         $pass = new RegisterHookListenersPass();
         $pass->process($container);
 
-        $this->assertSame(
+        self::assertSame(
             [
                 'initializeSystem' => [
                     10 => [
@@ -93,12 +93,12 @@ class RegisterHookListenersPassTest extends TestCase
         $container = $this->getContainerBuilder();
         $container->setDefinition('test.hook_listener', $definition);
 
-        $this->assertFalse($container->findDefinition('test.hook_listener')->isPublic());
+        self::assertFalse($container->findDefinition('test.hook_listener')->isPublic());
 
         $pass = new RegisterHookListenersPass();
         $pass->process($container);
 
-        $this->assertTrue($container->findDefinition('test.hook_listener')->isPublic());
+        self::assertTrue($container->findDefinition('test.hook_listener')->isPublic());
     }
 
     /**
@@ -121,7 +121,7 @@ class RegisterHookListenersPassTest extends TestCase
         $pass = new RegisterHookListenersPass();
         $pass->process($container);
 
-        $this->assertSame(
+        self::assertSame(
             [
                 'generatePage' => [
                     0 => [
@@ -154,7 +154,7 @@ class RegisterHookListenersPassTest extends TestCase
         $pass = new RegisterHookListenersPass();
         $pass->process($container);
 
-        $this->assertSame(
+        self::assertSame(
             [
                 'initializeSystem' => [
                     0 => [
@@ -213,7 +213,7 @@ class RegisterHookListenersPassTest extends TestCase
         $pass = new RegisterHookListenersPass();
         $pass->process($container);
 
-        $this->assertSame(
+        self::assertSame(
             [
                 'initializeSystem' => [
                     0 => [
@@ -281,7 +281,7 @@ class RegisterHookListenersPassTest extends TestCase
         $pass = new RegisterHookListenersPass();
         $pass->process($container);
 
-        $this->assertSame(
+        self::assertSame(
             [
                 'initializeSystem' => [
                     100 => [
@@ -312,7 +312,7 @@ class RegisterHookListenersPassTest extends TestCase
         ;
 
         $container
-            ->expects($this->never())
+            ->expects(self::never())
             ->method('findTaggedServiceIds')
         ;
 
@@ -334,8 +334,8 @@ class RegisterHookListenersPassTest extends TestCase
 
         $definition = $container->getDefinition(HookListenerRegistrar::class);
 
-        $this->assertEmpty($definition->getArgument(0));
-        $this->assertEmpty($container->getParameter('contao.resources_paths'));
+        self::assertEmpty($definition->getArgument(0));
+        self::assertEmpty($container->getParameter('contao.resources_paths'));
     }
 
     /**
@@ -367,15 +367,15 @@ class RegisterHookListenersPassTest extends TestCase
      */
     private function getHookListenersFromDefinition(ContainerBuilder $container): array
     {
-        $this->assertSame(
+        self::assertSame(
             [\dirname(__DIR__, 4) . '/src/Polyfill45/Resources/tagged_hooks'],
             $container->getParameter('contao.resources_paths')
         );
-        $this->assertTrue($container->hasDefinition(HookListenerRegistrar::class));
+        self::assertTrue($container->hasDefinition(HookListenerRegistrar::class));
 
         $definition = $container->getDefinition(HookListenerRegistrar::class);
         $argument   = $definition->getArgument(0);
-        $this->assertInternalType('array', $argument);
+        self::assertIsArray($argument);
 
         return $argument;
     }

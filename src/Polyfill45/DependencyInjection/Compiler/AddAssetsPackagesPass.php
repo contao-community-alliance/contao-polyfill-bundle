@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019-2020 Contao Community Alliance.
+ * (c) 2019-2021 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -14,7 +14,7 @@
  * @author     Andreas Schempp <andreas.schempp@terminal42.ch>
  * @author     Leo Feyer <github@contao.org>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2019-2020 Contao Community Alliance.
+ * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,6 +23,7 @@ declare(strict_types=1);
 
 namespace ContaoCommunityAlliance\Polyfills\Polyfill45\DependencyInjection\Compiler;
 
+use Composer\InstalledVersions;
 use ContaoCommunityAlliance\Polyfills\Polyfill45\Util\PackageUtil;
 use PackageVersions\Versions;
 use Symfony\Component\DependencyInjection\ChildDefinition;
@@ -108,7 +109,7 @@ class AddAssetsPackagesPass implements CompilerPassInterface
         $packages = $container->getDefinition('assets.packages');
         $context  = new Reference('contao.assets.plugins_context');
 
-        foreach (Versions::VERSIONS as $name => $version) {
+        foreach ($this->packageVersions() as $name => $version) {
             if (0 !== \strncmp('contao-components/', $name, 18)) {
                 continue;
             }
@@ -177,5 +178,29 @@ class AddAssetsPackagesPass implements CompilerPassInterface
         }
 
         return Container::underscore($className);
+    }
+
+    /**
+     * Get the package versions.
+     *
+     * @return array
+     */
+    private function packageVersions(): array
+    {
+        if (false === \class_exists(InstalledVersions::class)) {
+            return Versions::VERSIONS;
+        }
+
+        $versions = [];
+        $packages = InstalledVersions::getInstalledPackages();
+        foreach ($packages as $packageName) {
+            $versions[$packageName] = \sprintf(
+                '%s@%s',
+                InstalledVersions::getVersionRanges($packageName),
+                InstalledVersions::getReference($packageName)
+            );
+        }
+
+        return $versions;
     }
 }

@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019-2020 Contao Community Alliance.
+ * (c) 2019-2021 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2019-2020 Contao Community Alliance.
+ * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -23,7 +23,7 @@ namespace ContaoCommunityAlliance\Polyfills\Test\Polyfill49\DependencyInjection\
 
 use ContaoCommunityAlliance\Polyfills\Polyfill49\DependencyInjection\Compiler\TaggedMigrationsPass;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\Migration\MigrationCollectionPolyFill;
-use PackageVersions\Versions;
+use ContaoCommunityAlliance\Polyfills\Util\PackageUtil;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
@@ -37,7 +37,7 @@ class TaggedMigrationsPassTest extends TestCase
 {
     private function getExpectedResult(): array
     {
-        $coreVersion = Versions::getVersion('contao/core-bundle');
+        $coreVersion = PackageUtil::getVersion('contao/core-bundle');
         $migrations  = [];
         switch (true) {
             case \version_compare($coreVersion, '4.8', '>='):
@@ -81,9 +81,9 @@ class TaggedMigrationsPassTest extends TestCase
 
     public function testAddsTheMigrations(): void
     {
-        $coreVersion = Versions::getVersion('contao/core-bundle');
+        $coreVersion = PackageUtil::getVersion('contao/core-bundle');
         if ((0 === \strpos($coreVersion, 'dev-master')) || \version_compare($coreVersion, '4.9', '>=')) {
-            $this->markTestSkipped('Obsolete in Contao 4.9+');
+            self::markTestSkipped('Obsolete in Contao 4.9+');
         }
         $container = new ContainerBuilder();
         $container->setDefinition(
@@ -115,6 +115,6 @@ class TaggedMigrationsPassTest extends TestCase
 
         $migrationServices = $container->getDefinition(MigrationCollectionPolyFill::class)->getArgument(0);
 
-        $this->assertSame($this->getExpectedResult(), array_keys($migrationServices));
+        self::assertSame($this->getExpectedResult(), array_keys($migrationServices));
     }
 }

@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019-2020 Contao Community Alliance.
+ * (c) 2019-2021 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -16,7 +16,7 @@
  * @author     Andreas Schempp <andreas.schempp@terminal42.ch>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2019-2020 Contao Community Alliance.
+ * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -119,15 +119,15 @@ class HookListenerRegistrarTest extends TestCase
         $registrar = new HookListenerRegistrar($listeners);
         $registrar->registerHookListeners();
 
-        $this->assertArrayHasKey('TL_HOOKS', $GLOBALS);
-        $this->assertArrayHasKey('getPageLayout', $GLOBALS['TL_HOOKS']);
-        $this->assertArrayHasKey('generatePage', $GLOBALS['TL_HOOKS']);
-        $this->assertArrayHasKey('parseTemplate', $GLOBALS['TL_HOOKS']);
-        $this->assertArrayHasKey('isVisibleElement', $GLOBALS['TL_HOOKS']);
+        self::assertArrayHasKey('TL_HOOKS', $GLOBALS);
+        self::assertArrayHasKey('getPageLayout', $GLOBALS['TL_HOOKS']);
+        self::assertArrayHasKey('generatePage', $GLOBALS['TL_HOOKS']);
+        self::assertArrayHasKey('parseTemplate', $GLOBALS['TL_HOOKS']);
+        self::assertArrayHasKey('isVisibleElement', $GLOBALS['TL_HOOKS']);
 
         // Test hooks with high priority are added before low and legacy hooks
         // Test legacy hooks are added before hooks with priority 0
-        $this->assertSame(
+        self::assertSame(
             [
                 [
                     'test.listener.a',
@@ -146,7 +146,7 @@ class HookListenerRegistrarTest extends TestCase
         );
 
         // Test hooks with negative priority are added at the end
-        $this->assertSame(
+        self::assertSame(
             [
                 [
                     'test.listener.c',
@@ -165,7 +165,7 @@ class HookListenerRegistrarTest extends TestCase
         );
 
         // Test legacy hooks are kept when adding only hook listeners with high priority.
-        $this->assertSame(
+        self::assertSame(
             [
                 [
                     'test.listener.a',
@@ -180,7 +180,7 @@ class HookListenerRegistrarTest extends TestCase
         );
 
         // Test legacy hooks are kept when adding only hook listeners with low priority.
-        $this->assertSame(
+        self::assertSame(
             [
                 [
                     'test.listener.c',

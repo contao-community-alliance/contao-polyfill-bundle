@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019-2020 Contao Community Alliance.
+ * (c) 2019-2021 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -15,7 +15,7 @@
  * @author     Leo Feyer <github@contao.org>
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2019-2020 Contao Community Alliance.
+ * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -42,7 +42,7 @@ class ContaoContextTest extends TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         parent::setUpBeforeClass();
         // Some class mapping for Contao 4.4.
@@ -56,14 +56,14 @@ class ContaoContextTest extends TestCase
     {
         $context = new ContaoContext(new RequestStack(), 'staticPlugins', true);
 
-        $this->assertSame('', $context->getBasePath());
+        self::assertSame('', $context->getBasePath());
     }
 
     public function testReturnsAnEmptyBasePathIfThereIsNoRequest(): void
     {
         $context = $this->getContaoContext('staticPlugins');
 
-        $this->assertSame('', $context->getBasePath());
+        self::assertSame('', $context->getBasePath());
     }
 
     public function testReturnsAnEmptyBasePathIfThePageDoesNotDefineIt(): void
@@ -74,7 +74,7 @@ class ContaoContextTest extends TestCase
 
         $context = $this->getContaoContext('staticPlugins');
 
-        $this->assertSame('', $context->getBasePath());
+        self::assertSame('', $context->getBasePath());
 
         unset($GLOBALS['objPage']);
     }
@@ -90,7 +90,7 @@ class ContaoContextTest extends TestCase
     ): void {
         $request = $this->createMock(Request::class);
         $request
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getBasePath')
             ->willReturn($basePath);
 
@@ -105,7 +105,7 @@ class ContaoContextTest extends TestCase
 
         $context = $this->getContaoContext('staticPlugins', $requestStack);
 
-        $this->assertSame($expected, $context->getBasePath());
+        self::assertSame($expected, $context->getBasePath());
 
         unset($GLOBALS['objPage']);
     }
@@ -123,7 +123,7 @@ class ContaoContextTest extends TestCase
     {
         $request = $this->createMock(Request::class);
         $request
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getBasePath')
             ->willReturn('/foo');
 
@@ -138,14 +138,14 @@ class ContaoContextTest extends TestCase
 
         $context = $this->getContaoContext('staticPlugins', $requestStack);
 
-        $this->assertSame('https://example.com/foo/', $context->getStaticUrl());
+        self::assertSame('https://example.com/foo/', $context->getStaticUrl());
     }
 
     public function testReturnsAnEmptyStaticUrlIfTheBasePathIsEmpty(): void
     {
         $context = new ContaoContext(new RequestStack(), 'staticPlugins');
 
-        $this->assertSame('', $context->getStaticUrl());
+        self::assertSame('', $context->getStaticUrl());
     }
 
     public function testReadsTheSslConfigurationFromThePage(): void
@@ -157,10 +157,10 @@ class ContaoContextTest extends TestCase
         $context = $this->getContaoContext('');
 
         $page->rootUseSSL = true;
-        $this->assertTrue($context->isSecure());
+        self::assertTrue($context->isSecure());
 
         $page->rootUseSSL = false;
-        $this->assertFalse($context->isSecure());
+        self::assertFalse($context->isSecure());
 
         unset($GLOBALS['objPage']);
     }
@@ -174,20 +174,20 @@ class ContaoContextTest extends TestCase
 
         $context = $this->getContaoContext('', $requestStack);
 
-        $this->assertFalse($context->isSecure());
+        self::assertFalse($context->isSecure());
 
         $request->server->set('HTTPS', 'on');
-        $this->assertTrue($context->isSecure());
+        self::assertTrue($context->isSecure());
 
         $request->server->set('HTTPS', 'off');
-        $this->assertFalse($context->isSecure());
+        self::assertFalse($context->isSecure());
     }
 
     public function testDoesNotReadTheSslConfigurationIfThereIsNoRequest(): void
     {
         $context = $this->getContaoContext('');
 
-        $this->assertFalse($context->isSecure());
+        self::assertFalse($context->isSecure());
     }
 
     private function getPageWithDetails(): PageModel

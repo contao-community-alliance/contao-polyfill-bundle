@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019-2020 Contao Community Alliance.
+ * (c) 2019-2021 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -12,7 +12,7 @@
  *
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
- * @copyright  2019-2020 Contao Community Alliance.
+ * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -49,7 +49,7 @@ class CcaContaoPolyfill49ExtensionTest extends TestCase
      */
     public function testInstantiation(): void
     {
-        $this->assertInstanceOf(CcaContaoPolyfill49Extension::class, new CcaContaoPolyfill49Extension());
+        self::assertInstanceOf(CcaContaoPolyfill49Extension::class, new CcaContaoPolyfill49Extension());
     }
 
     /**
@@ -64,7 +64,7 @@ class CcaContaoPolyfill49ExtensionTest extends TestCase
             ->setMethods(['setDefinition'])
             ->getMock();
         $container
-            ->expects($this->exactly(8))
+            ->expects(self::exactly(8))
             ->method('setDefinition')
             ->withConsecutive(
                 [MigrationCollectionPolyFill::class],
@@ -93,7 +93,7 @@ class CcaContaoPolyfill49ExtensionTest extends TestCase
             ->getMockBuilder(ContainerBuilder::class)
             ->setMethods(['setDefinition'])
             ->getMock();
-        $container->expects($this->never())->method('setDefinition');
+        $container->expects(self::never())->method('setDefinition');
 
         $extension = new CcaContaoPolyfill49Extension();
 
@@ -119,23 +119,23 @@ class CcaContaoPolyfill49ExtensionTest extends TestCase
         $extension->load([['migration' => true]], $container);
 
         // migration services.
-        $this->assertTrue($container->has(MigrationCollectionPolyFill::class));
-        $this->assertTrue($container->has(MigrationController::class));
-        $this->assertTrue($container->has(MigrationApplicationListener::class));
-        $this->assertTrue($container->has(ServiceFactory::class));
-        $this->assertTrue($container->has(MigrationInstaller::class));
-        $this->assertTrue($container->has(MigrateCommand::class));
+        self::assertTrue($container->has(MigrationCollectionPolyFill::class));
+        self::assertTrue($container->has(MigrationController::class));
+        self::assertTrue($container->has(MigrationApplicationListener::class));
+        self::assertTrue($container->has(ServiceFactory::class));
+        self::assertTrue($container->has(MigrationInstaller::class));
+        self::assertTrue($container->has(MigrateCommand::class));
         // It set public true in the compiler pass.
         $container->getDefinition(MigrationCollectionPolyFill::class)->setPublic(true);
         $container->compile();
 
         // migration services must be public.
-        $this->assertTrue($container->has(MigrationCollectionPolyFill::class));
+        self::assertTrue($container->has(MigrationCollectionPolyFill::class));
         // migration services not public.
-        $this->assertFalse($container->has(MigrationController::class));
-        $this->assertFalse($container->has(MigrationApplicationListener::class));
-        $this->assertFalse($container->has(ServiceFactory::class));
-        $this->assertFalse($container->has(MigrationInstaller::class));
-        $this->assertFalse($container->has(MigrateCommand::class));
+        self::assertFalse($container->has(MigrationController::class));
+        self::assertFalse($container->has(MigrationApplicationListener::class));
+        self::assertFalse($container->has(ServiceFactory::class));
+        self::assertFalse($container->has(MigrationInstaller::class));
+        self::assertFalse($container->has(MigrateCommand::class));
     }
 }

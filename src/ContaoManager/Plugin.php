@@ -3,7 +3,7 @@
 /**
  * This file is part of contao-community-alliance/contao-polyfill-bundle.
  *
- * (c) 2019-2020 Contao Community Alliance.
+ * (c) 2019-2021 Contao Community Alliance.
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -13,7 +13,8 @@
  * @package    contao-community-alliance/contao-polyfill-bundle
  * @author     Sven Baumann <baumann.sv@gmail.com>
  * @author     Christian Schiffler <c.schiffler@cyberspectrum.de>
- * @copyright  2019-2020 Contao Community Alliance.
+ * @author     Richard Henkenjohann <richardhenkenjohann@googlemail.com>
+ * @copyright  2019-2021 Contao Community Alliance.
  * @license    https://github.com/contao-community-alliance/contao-polyfill-bundle/blob/master/LICENSE LGPL-3.0-or-later
  * @filesource
  */
@@ -30,7 +31,7 @@ use ContaoCommunityAlliance\Polyfills\Polyfill45\CcaContaoPolyfill45Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill46\CcaContaoPolyfill46Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill47\CcaContaoPolyfill47Bundle;
 use ContaoCommunityAlliance\Polyfills\Polyfill49\CcaContaoPolyfill49Bundle;
-use PackageVersions\Versions;
+use ContaoCommunityAlliance\Polyfills\Util\PackageUtil;
 
 /**
  * Plugin for the Contao Manager.
@@ -45,7 +46,7 @@ class Plugin implements BundlePluginInterface
         $bundles     = [];
         $coreVersion = $this->getContaoCoreVersion();
         $loadAfter   = [ContaoCoreBundle::class];
-        if (0 === strncmp($coreVersion, 'dev-master', 10)) {
+        if (!\preg_match('/^(\d+\.)+\d+$/', $coreVersion)) {
             return [];
         }
 
@@ -76,7 +77,7 @@ class Plugin implements BundlePluginInterface
      */
     protected function getContaoCoreVersion(): string
     {
-        return Versions::getVersion('contao/core-bundle');
+        return PackageUtil::getContaoVersion();
     }
 
     /**
