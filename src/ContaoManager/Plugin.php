@@ -77,7 +77,7 @@ class Plugin implements BundlePluginInterface
      */
     protected function getContaoCoreVersion(): string
     {
-        return PackageUtil::getVersion('contao/core-bundle') ?: PackageUtil::getVersion('contao/contao');
+        return PackageUtil::getContaoVersion();
     }
 
     /**
