@@ -28,6 +28,7 @@ use ContaoCommunityAlliance\Polyfills\Polyfill49\Factory\ServiceFactory;
 use Doctrine\DBAL\Connection;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\DependencyInjection\ContainerInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
  * @covers \ContaoCommunityAlliance\Polyfills\Polyfill49\Factory\ServiceFactory
@@ -63,16 +64,33 @@ class ServiceFactoryTest extends TestCase
             ->method('getParameter')
             ->willReturnCallback(
                 function ($name) {
-                    if ('kernel.project_dir' === $name) {
-                        return 'foo';
-                    }
-                    if ('kernel.cache_dir' === $name) {
-                        return \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixtures/cache';
-                    }
+                    switch ($name) {
+                        case 'kernel.project_dir':
+                            return 'foo';
 
-                    $this->fail('Unknown parameter ' . $name . ' requested.');
+                        case 'kernel.cache_dir':
+                            return \dirname(__DIR__) . DIRECTORY_SEPARATOR . 'Fixtures/cache';
+
+                        case 'kernel.debug':
+                            return false;
+
+                        default:
+                            $this->fail('Unknown parameter ' . $name . ' requested.');
+                    }
                 }
             );
+        $container
+            ->method('get')
+            ->willReturnCallback(
+                function ($name) {
+                    if ('request_stack' === $name) {
+                        return new RequestStack();
+                    }
+
+                    $this->fail('Unknown service ' . $name . ' requested.');
+                }
+            );
+
         $framework = $this
             ->getMockBuilder(ContaoFramework::class)
             ->disableOriginalConstructor()
