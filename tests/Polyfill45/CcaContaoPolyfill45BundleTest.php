@@ -73,7 +73,14 @@ class CcaContaoPolyfill45BundleTest extends TestCase
             ->method('initializeBundles');
         $kernel
             ->expects(self::exactly(2))
-            ->method('initializeContainer');
+            ->method('initializeContainer')
+            ->willReturnCallback(
+                function () use ($kernel) {
+                    $reflection = new \ReflectionProperty('AppKernel', 'container');
+                    $reflection->setAccessible(true);
+                    $reflection->setValue($kernel, new \Symfony\Component\DependencyInjection\ContainerBuilder());
+                }
+            );
 
         $kernel->boot();
         $kernel->shutdown();

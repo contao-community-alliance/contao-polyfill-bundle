@@ -243,6 +243,7 @@ class ContaoContextTest extends TestCase
         $container->setParameter('kernel.cache_dir', $projectDir . '/var/cache');
         $container->setParameter('kernel.project_dir', $projectDir);
         $container->setParameter('kernel.root_dir', $projectDir . '/app');
+        $container->setParameter('contao.legacy_routing', '');
 
         // Load the default configuration
         $extension = new CcaContaoPolyfill45Extension();

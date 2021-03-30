@@ -48,16 +48,6 @@ class CcaContaoPolyfill49BundleTest extends TestCase
     {
         $bundle = new CcaContaoPolyfill49Bundle();
 
-        $container = $this
-            ->getMockBuilder(ContainerBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['has'])
-            ->getMock();
-        $container
-            ->expects(self::exactly(2))
-            ->method('has')
-            ->willReturn(true);
-
         $kernel = $this->getMockForAbstractClass(
             Kernel::class,
             [],
@@ -80,18 +70,17 @@ class CcaContaoPolyfill49BundleTest extends TestCase
             ->method('initializeBundles');
         $kernel
             ->expects(self::exactly(2))
-            ->method('initializeContainer');
+            ->method('initializeContainer')
+            ->willReturnCallback(
+                function () use ($kernel) {
+                    $reflection = new \ReflectionProperty('AppKernel', 'container');
+                    $reflection->setAccessible(true);
+                    $reflection->setValue($kernel, new ContainerBuilder());
+                }
+            );
 
-        $reflection1 = new \ReflectionProperty('AppKernel', 'container');
-        $reflection1->setAccessible(true);
-        $reflection1->setValue($kernel, $container);
         $kernel->boot();
-
         $kernel->shutdown();
-
-        $reflection2 = new \ReflectionProperty('AppKernel', 'container');
-        $reflection2->setAccessible(true);
-        $reflection2->setValue($kernel, $container);
         $kernel->boot();
     }
 
